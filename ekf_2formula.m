@@ -119,43 +119,7 @@ P_1 = (eye(n_state)-k*H)*P;
 end
 
 
-function [x_1, P_1] = predict(x,dt,P,Q)
-%% kalman filter predict
 
-x_1 = x;
-
-%new state
-if abs(x(5)) < 0.0001 
-    %going straight
-    x_1(1) = x(1)+cos(x(3))*x(4)*dt;
-    x_1(2) = x(2)+sin(x(3))*x(4)*dt;
-    x_1(3) = x(3);
-    x_1(4) = x(4);
-    x_1(5) = 0.0000001;
-else
-    %otherwise
-    x_1(1) = x(1)+ x(4)/x(5) * sin(x(5)*dt+x(3)) - sin(x(3));
-    x_1(2) = x(2)+ x(4)/x(5) * (-cos(x(5)*dt+x(3))) + cos(x(3));
-    x_1(3) = x(3) + x(5)*dt + pi;
-    x_1(4) = x(4);
-    x_1(5) = x(5);
-end
-
-
-a13 = (x_1(4)/x_1(5)) * (cos(x_1(5)*dt+x_1(3)) - cos(x_1(3)));
-a14 = (1.0/x_1(5)) * (sin(x_1(5)*dt+x_1(3)) - sin(x_1(3)));
-a15 = (dt*x_1(4)/x_1(5))*cos(x_1(5)*dt+x_1(3)) - (x_1(4)/x_1(5)^2)*(sin(x_1(5)*dt+x_1(3)) - sin(x_1(3)));
-a23 = (x_1(4)/x_1(5)) * (sin(x_1(5)*dt+x_1(3)) - sin(x_1(3)));
-a24 = (1.0/x_1(5)) * (-cos(x_1(5)*dt+x_1(3)) + cos(x_1(3)));
-a25 = (dt*x_1(4)/x_1(5))*sin(x_1(5)*dt+x_1(3)) - (x_1(4)/x_1(5)^2)*(-cos(x_1(5)*dt+x_1(3)) + cos(x_1(3)));
-J = [   1.0     0.0     a13     a14     a15;
-        0.0     1.0     a23     a24     a25;
-        0.0     0.0     1.0     0.0     dt;
-        0.0     0.0     0.0     1.0     0.0;
-        0.0     0.0     0.0     0.0     1.0;];
-
-P_1 = J*P*J' + Q;
-end
 
 function [ ] = plot_zs( z_list, col )
 %UNTITLED2 Summary of this function goes here

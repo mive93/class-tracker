@@ -6,10 +6,10 @@ drawArrow = @(x,y) quiver( x(1),y(1),x(2),y(2),0 )
 
 %% generate trajectory
 t = [0 1 2 3 4 5];
-points = [0 0; 1 0; 1 1; 0 1; 0 2; 1 2].*10;
+points = [0 0; 1 0; 1 1; 0 1; 0 2; 1 2];
 x = points(:,1);
 y = points(:,2);
-tq = 0:0.07:5;
+tq = 0:0.1:5;
 slope0 = 0;
 slopeF = 0;
 spline_x =  spline(t,[slope0; x; slopeF])
@@ -27,14 +27,14 @@ y_noise = -0.035+0.07*rand(1,size(xq,2));
 xq = xq+x_noise;
 yq = yq+y_noise;
 
-dx = ppval(spline_x_d,0:0.005:5)
-dy = ppval(spline_y_d,0:0.005:5)
+dx = ppval(spline_x_d,0:0.01:5)
+dy = ppval(spline_y_d,0:0.01:5)
 
 yaw = atan2(dy,dx)
 
 %% kalman filter 
 
-dt = 0.005; % delta t
+dt = 0.01; % delta t
 n_state = 5; %number of states in state vector
 P = eye(n_state); % covariance
 
@@ -54,12 +54,12 @@ varGPS = 0.2; % Standard Deviation of GPS Measurement
 Q = diag([varGPS^2, varGPS^2]);
 
 sGPS     = 5*dt;
-sCourse  = 0*dt;
-sVelocity= 0.3*dt;
+sCourse  = 0.01*dt;
+sVelocity= 3*dt;
 sYaw     = 100*dt;
 
-
 R = diag([sGPS^2, sGPS^2, sCourse^2, sVelocity^2, sYaw^2]);
+
 
 j = 1;
 x = [xq(1), yq(1),0,0,0]'; % state [x y yaw speed yawrate]
@@ -160,17 +160,17 @@ function [x_1, P_1] = predict(x,dt,P,Q)
 x_1 = x;
 
 %new state
-if abs(x(5)) < 0.0001 
+if abs(x(5)) < 0.000001 
     %going straight
     x_1(1) = x(1)+cos(x(3))*x(4)*dt;
     x_1(2) = x(2)+sin(x(3))*x(4)*dt;
     x_1(3) = x(3);
     x_1(4) = x(4);
-    x_1(5) = 0.0001;
+    x_1(5) = 0.0000001;
 else
-    % otherwise
-    x_1(1) = x(1)+ (x(4)/x(5)) * (sin(x(5)*dt+x(3)) - sin(x(3)));
-    x_1(2) = x(2)+ (x(4)/x(5)) * ((-cos(x(5)*dt+x(3))) + cos(x(3)));
+    otherwise
+    x_1(1) = x(1)+ x(4)/x(5) * sin(x(5)*dt+x(3)) - sin(x(3));
+    x_1(2) = x(2)+ x(4)/x(5) * (-cos(x(5)*dt+x(3))) + cos(x(3));
     x_1(3) = x(3) + x(5)*dt;
     x_1(4) = x(4);
     x_1(5) = x(5);
@@ -179,10 +179,10 @@ end
 
 a13 = (x_1(4)/x_1(5)) * (cos(x_1(5)*dt+x_1(3)) - cos(x_1(3)));
 a14 = (1.0/x_1(5)) * (sin(x_1(5)*dt+x_1(3)) - sin(x_1(3)));
-a15 = (dt*x_1(4)/x_1(5))*cos(x_1(5)*dt+x_1(3)) - (x_1(4)/(x_1(5)^2))*(sin(x_1(5)*dt+x_1(3)) - sin(x_1(3)));
+a15 = (dt*x_1(4)/x_1(5))*cos(x_1(5)*dt+x_1(3)) - (x_1(4)/x_1(5)^2)*(sin(x_1(5)*dt+x_1(3)) - sin(x_1(3)));
 a23 = (x_1(4)/x_1(5)) * (sin(x_1(5)*dt+x_1(3)) - sin(x_1(3)));
 a24 = (1.0/x_1(5)) * (-cos(x_1(5)*dt+x_1(3)) + cos(x_1(3)));
-a25 = (dt*x_1(4)/x_1(5))*sin(x_1(5)*dt+x_1(3)) - (x_1(4)/(x_1(5)^2))*(-cos(x_1(5)*dt+x_1(3)) + cos(x_1(3)));
+a25 = (dt*x_1(4)/x_1(5))*sin(x_1(5)*dt+x_1(3)) - (x_1(4)/x_1(5)^2)*(-cos(x_1(5)*dt+x_1(3)) + cos(x_1(3)));
 J = [   1.0     0.0     a13     a14     a15;
         0.0     1.0     a23     a24     a25;
         0.0     0.0     1.0     0.0     dt;
