@@ -18,8 +18,8 @@ y_noise = -0.035+0.07*rand(1,size(xq,2))
 xqn = xq+x_noise
 yqn = yq+y_noise
 
-figure()
-plot(xqn,yqn, '.');
+% figure()
+% plot(xqn,yqn, '.');
 
 
 % 
@@ -52,3 +52,8 @@ plot(xqn,yqn, '.');
 % sp0 = spap2( augknt(0:2:10,4), 4, x, y );
 % sp1 = spap2( newknt(sp0), 4, x, y );
 % plot(x,y-fnval(sp0,x),'k','LineWidth',2)
+
+
+
+
+
