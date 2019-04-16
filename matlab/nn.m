@@ -2,7 +2,7 @@ clear all
 close all
 
 data_size = 4;
-filename = 'test_ll.txt';
+filename = '../data/test_ll.txt';
 data_format = '%d\t%d\t%f\t%f\n';
 
 addpath('/home/micaela/repos/tkmatlab/src/ekf');
