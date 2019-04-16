@@ -4,8 +4,7 @@
 #include <vector>
 #include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/LU>
-#include<iostream>
-
+#include <iostream>
 
 struct State
 {
@@ -21,9 +20,9 @@ struct State
 
 class EKF
 {
-    private:
-    int n_states_; 
-    float dt_; 
+  private:
+    int n_states_;
+    float dt_;
     std::vector<State> x_est_;
     Eigen::MatrixXf *Q_;
     Eigen::MatrixXf *R_;
@@ -33,14 +32,10 @@ class EKF
     State StateTransition();
     Eigen::MatrixXf Jacobian(State x);
 
-    public:
+  public:
     EKF(int n_states, float dt, Eigen::MatrixXf *Q, Eigen::MatrixXf *R, State in_state);
     void printInternalState();
     void EKFStep(Eigen::MatrixXf H, Eigen::VectorXf z);
 };
-
-
-
-
 
 #endif /*EKF_H*/
