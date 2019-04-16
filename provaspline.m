@@ -18,6 +18,8 @@ y_noise = -0.035+0.07*rand(1,size(xq,2))
 xqn = xq+x_noise
 yqn = yq+y_noise
 
+
+
 % figure()
 % plot(xqn,yqn, '.');
 
