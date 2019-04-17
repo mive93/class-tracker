@@ -1,8 +1,11 @@
 #include <iostream>
 #include <eigen3/Eigen/Core>
 #include "ekf.h"
+#include "utils.h"
+#include "plot.h"
 
-int main(int argc, char **argv)
+
+void EKFtest()
 {
     std::cout << "This is a test" << std::endl;
 
@@ -32,4 +35,16 @@ int main(int argc, char **argv)
 
     ekf.EKFStep(H, v);
     ekf.printInternalState();
+
+}
+
+int main(int argc, char **argv)
+{
+    std::vector<Data> data = readDataFromFile("../../data/test_ll.txt");
+    for(auto d: data)
+        d.print();
+
+    testMatplotlib();
+
+    return EXIT_SUCCESS;
 }
