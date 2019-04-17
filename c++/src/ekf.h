@@ -14,6 +14,7 @@ struct State
     float vel_;
     float yaw_rate_;
 
+    State();
     State(float x, float y, float yaw, float vel, float yaw_rate);
     void PrintState();
 };
@@ -23,7 +24,7 @@ class EKF
   private:
     int n_states_;
     float dt_;
-    std::vector<State> x_est_;
+    State x_est_;
     Eigen::MatrixXf *Q_;
     Eigen::MatrixXf *R_;
     Eigen::MatrixXf *P_;

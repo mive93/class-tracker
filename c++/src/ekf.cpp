@@ -1,5 +1,15 @@
 #include "ekf.h"
 
+
+State::State()
+{
+    x_ = 0;
+    y_ = 0;
+    yaw_ = 0;
+    vel_ = 0;
+    yaw_rate_ = 0;
+}
+
 State::State(float x, float y, float yaw, float vel, float yaw_rate)
 {
     x_ = x;
@@ -30,7 +40,7 @@ EKF::EKF(int n_states, float dt, Eigen::MatrixXf *Q, Eigen::MatrixXf *R, State i
     (*P_).setIdentity();
     (*H_).setZero();
 
-    x_est_.push_back(in_state);
+    x_est_ = in_state;
 }
 
 void EKF::printInternalState()
@@ -45,8 +55,7 @@ void EKF::printInternalState()
               << *R_ << std::endl;
     std::cout << "H: \n"
               << *H_ << std::endl;
-    for (auto s : x_est_)
-        s.PrintState();
+    x_est_.PrintState();
 }
 
 Eigen::VectorXf StateIntoVector(State x, int n_states)
@@ -70,26 +79,24 @@ void EKF::EKFStep(Eigen::MatrixXf H, Eigen::VectorXf z)
 {
     *H_ = H;
 
-    Eigen::MatrixXf PPred(n_states_, n_states_);
-
     //predict
     State x = StateTransition();
     Eigen::MatrixXf J = Jacobian(x);
-    PPred = J * (*P_) * J.transpose() + (*Q_);
+    Eigen::MatrixXf PPred = J * (*P_) * J.transpose() + (*Q_);
 
     //update
-    Eigen::VectorXf y = z - StateIntoVector(x_est_.back(), n_states_);
+    Eigen::VectorXf y = z - StateIntoVector(x_est_, n_states_);
     Eigen::MatrixXf S = (*H_) * PPred * (*H_).transpose() + (*R_);
     Eigen::MatrixXf K = PPred * (*H_).transpose() * (S.inverse());
     Eigen::VectorXf x_est_vec = StateIntoVector(x, n_states_) + K * y;
-    x_est_.push_back(VectorIntoState(x_est_vec));
+    x_est_ = VectorIntoState(x_est_vec);
     (*P_) = PPred - K * (*H_) * PPred;
 }
 
 State EKF::StateTransition()
 {
-    State x = x_est_.back();
-    State y(0, 0, 0, 0, 0);
+    State x = x_est_;
+    State y;
     if (abs(x.yaw_rate_) < 0.0001)
     {
         y.x_ = x.x_ + x.vel_ * dt_ * cos(x.yaw_);
