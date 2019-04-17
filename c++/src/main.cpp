@@ -3,6 +3,7 @@
 #include "ekf.h"
 #include "utils.h"
 #include "plot.h"
+#include "tracker.h"
 
 
 void EKFtest()
@@ -44,7 +45,11 @@ int main(int argc, char **argv)
     for(auto d: data)
         d.print();
 
-    testMatplotlib();
+    //testMatplotlib();
+
+    float dt = 0.03;
+    int n_states = 5;
+    TrackOnGivenData(data,dt,n_states);
 
     return EXIT_SUCCESS;
 }
