@@ -5,6 +5,22 @@ void Data::print()
     std::cout<<x_<<" "<<y_<<" "<<frame_<<std::endl;
 }
 
+
+Data::Data()
+{
+    x_ = 0;
+    y_ = 0;
+    frame_ = -1;
+}
+
+Data::Data(float x, float y, int frame)
+{
+    x_ = x;
+    y_ = y;
+    frame_ = frame;
+}
+
+
 std::vector<Data> readDataFromFile(std::string filename)
 {
     std::ifstream file;
@@ -14,6 +30,11 @@ std::vector<Data> readDataFromFile(std::string filename)
     long int timestamp;
     std::vector<Data> data;
 
+    double east, north, up;
+
+    geodetic_converter::GeodeticConverter gc;
+    gc.initialiseReference(44.655540,10.934315, 0);
+
     if (file.is_open())
     {
         std::string line;
@@ -21,6 +42,13 @@ std::vector<Data> readDataFromFile(std::string filename)
         {
             std::istringstream iss(line);
             iss >> d.frame_ >> timestamp >> d.x_ >> d.y_;
+
+            //conversion from lat lon to distance(m) from centre
+            gc.geodetic2Enu(d.x_, d.y_, 0, &east, &north, &up);
+
+            d.x_ = east;
+            d.y_ = north;
+
             data.push_back(d);
         }
     }

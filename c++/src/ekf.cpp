@@ -1,6 +1,5 @@
 #include "ekf.h"
 
-
 State::State()
 {
     x_ = 0;
@@ -19,7 +18,7 @@ State::State(float x, float y, float yaw, float vel, float yaw_rate)
     yaw_rate_ = yaw_rate;
 }
 
-void State::PrintState()
+void State::print()
 {
     std::cout << x_ << " " << y_ << " " << yaw_ << " " << vel_ << " " << yaw_rate_ << std::endl;
 }
@@ -43,6 +42,19 @@ EKF::EKF(int n_states, float dt, Eigen::MatrixXf *Q, Eigen::MatrixXf *R, State i
     x_est_ = in_state;
 }
 
+EKF::~EKF()
+{
+    //FIXME - undestand why segfault
+    /* if (Q_)
+        delete Q_;
+    if (R_)
+        delete R_;
+    if (H_)
+        delete H_;
+    if (P_)
+        delete P_; */
+}
+
 void EKF::printInternalState()
 {
     std::cout << "n_states: " << n_states_ << std::endl;
@@ -55,7 +67,7 @@ void EKF::printInternalState()
               << *R_ << std::endl;
     std::cout << "H: \n"
               << *H_ << std::endl;
-    x_est_.PrintState();
+    x_est_.print();
 }
 
 Eigen::VectorXf StateIntoVector(State x, int n_states)
@@ -133,4 +145,9 @@ Eigen::MatrixXf EKF::Jacobian(State x)
     J(2, 4) = dt_;
 
     return J;
+}
+
+State EKF::getEstimatedState()
+{
+    return x_est_;
 }

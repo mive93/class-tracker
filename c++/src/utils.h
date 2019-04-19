@@ -6,6 +6,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include "geodetic_conv.hpp"
 
 struct Data
 {
@@ -13,6 +14,8 @@ struct Data
     float y_;
     int frame_;
 
+    Data();
+    Data(float x, float y, int frame);
     void print();
 };
 

@@ -16,7 +16,7 @@ struct State
 
     State();
     State(float x, float y, float yaw, float vel, float yaw_rate);
-    void PrintState();
+    void print();
 };
 
 class EKF
@@ -35,8 +35,12 @@ class EKF
 
   public:
     EKF(int n_states, float dt, Eigen::MatrixXf *Q, Eigen::MatrixXf *R, State in_state);
+    ~EKF();
     void printInternalState();
     void EKFStep(Eigen::MatrixXf H, Eigen::VectorXf z);
+    State getEstimatedState();
+    
+
 };
 
 #endif /*EKF_H*/
