@@ -91,8 +91,8 @@ void deleteOldTrajectories(std::vector<Tracker> &trackers, int age_threshold)
         else
         {
             std::cout << "Deleting a trajectory" << std::endl;
-            if (trackers[i].z_list_.size() > 10)
-                plotTruthvsPred(trackers[i].z_list_, trackers[i].pred_list_);
+            /* if (trackers[i].z_list_.size() > 10)
+                plotTruthvsPred(trackers[i].z_list_, trackers[i].pred_list_); */
         }
     }
 
