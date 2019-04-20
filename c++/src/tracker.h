@@ -2,7 +2,7 @@
 #define TRACKER_H
 
 #include "ekf.h"
-#include "utils.h"
+#include "trackutils.h"
 #include "plot.h"
 
 struct Tracker

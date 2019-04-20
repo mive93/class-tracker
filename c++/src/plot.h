@@ -3,7 +3,7 @@
 
 #include "matplotlibcpp.h"
 #include "ekf.h"
-#include "utils.h"
+#include "trackutils.h"
 
 void testMatplotlib();
 void plotTrajectory(std::vector<Data> trajectory);

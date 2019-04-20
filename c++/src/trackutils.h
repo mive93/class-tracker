@@ -1,5 +1,5 @@
-#ifndef UTILS_H
-#define UTILS_H
+#ifndef TRACKUTILS_H
+#define TRACKUTILS_H
 
 #include <vector>
 #include <string>
@@ -22,4 +22,4 @@ struct Data
 std::vector<Data> readDataFromFile(std::string filename);
 
 
-#endif /*UTILS_H*/
+#endif /*TRACKUTILS_H*/
