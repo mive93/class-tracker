@@ -5,6 +5,10 @@ Tracker::Tracker(Data first_point, int initial_age, float dt, int n_states)
     traj_.push_back(first_point);
     age_ = initial_age;
     ekf_ = EFKinitialize(dt, n_states, first_point);
+
+    r_ = rand() % 256;
+    g_ = rand() % 256;
+    b_ = rand() % 256;
 }
 
 EKF EFKinitialize(float dt, int n_states, Data first_point)

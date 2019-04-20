@@ -4,6 +4,11 @@
 #include "ekf.h"
 #include "trackutils.h"
 #include "plot.h"
+#include <cstdlib>     
+
+
+
+  
 
 struct Tracker
 {
@@ -13,6 +18,10 @@ struct Tracker
     std::vector<State> pred_list_;
     EKF ekf_;
     int age_;
+    int r_;
+    int g_;
+    int b_;
+    
 
     Tracker(Data first_point, int initial_age, float dt, int n_states);
 };
