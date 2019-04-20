@@ -9,5 +9,6 @@ add_executable(tracker  src/main.cpp
                         src/ekf.cpp
                         src/utils.cpp
                         src/plot.cpp
+                        src/tracker.cpp
                         )
 target_link_libraries(tracker python2.7)

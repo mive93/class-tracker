@@ -23,6 +23,8 @@ void State::print()
     std::cout << x_ << " " << y_ << " " << yaw_ << " " << vel_ << " " << yaw_rate_ << std::endl;
 }
 
+EKF::EKF() {}
+
 EKF::EKF(int n_states, float dt, Eigen::MatrixXf *Q, Eigen::MatrixXf *R, State in_state)
 {
 

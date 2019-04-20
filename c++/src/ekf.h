@@ -35,6 +35,7 @@ class EKF
 
   public:
     EKF(int n_states, float dt, Eigen::MatrixXf *Q, Eigen::MatrixXf *R, State in_state);
+    EKF();
     ~EKF();
     void printInternalState();
     void EKFStep(Eigen::MatrixXf H, Eigen::VectorXf z);
