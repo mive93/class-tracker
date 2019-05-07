@@ -25,7 +25,7 @@ void State::print()
 
 EKF::EKF() {}
 
-EKF::EKF(int n_states, float dt, Eigen::MatrixXf *Q, Eigen::MatrixXf *R, State in_state)
+EKF::EKF(int n_states, float dt, Eigen::MatrixXf *Q, Eigen::MatrixXf *R, const State& in_state)
 {
 
     n_states_ = n_states;
@@ -72,7 +72,7 @@ void EKF::printInternalState()
     x_est_.print();
 }
 
-Eigen::VectorXf StateIntoVector(State x, int n_states)
+Eigen::VectorXf StateIntoVector(const State& x, int n_states)
 {
     Eigen::VectorXf v(n_states);
     v(0) = x.x_;
@@ -83,14 +83,16 @@ Eigen::VectorXf StateIntoVector(State x, int n_states)
     return v;
 }
 
-State VectorIntoState(Eigen::VectorXf v)
+State VectorIntoState(const Eigen::VectorXf& v)
 {
     State x(v(0), v(1), v(2), v(3), v(4));
     return x;
 }
 
-void EKF::EKFStep(Eigen::MatrixXf H, Eigen::VectorXf z)
+void EKF::EKFStep(const Eigen::MatrixXf& H, const Eigen::VectorXf& z)
 {
+
+    
     *H_ = H;
 
     //predict
@@ -98,13 +100,18 @@ void EKF::EKFStep(Eigen::MatrixXf H, Eigen::VectorXf z)
     Eigen::MatrixXf J = Jacobian(x);
     Eigen::MatrixXf PPred = J * (*P_) * J.transpose() + (*Q_);
 
+    
     //update
+
+    Eigen::MatrixXf Ht = (*H_).transpose();
+
     Eigen::VectorXf y = z - StateIntoVector(x_est_, n_states_);
-    Eigen::MatrixXf S = (*H_) * PPred * (*H_).transpose() + (*R_);
-    Eigen::MatrixXf K = PPred * (*H_).transpose() * (S.inverse());
+    Eigen::MatrixXf S = (*H_) * PPred * Ht + (*R_);
+    Eigen::MatrixXf K = PPred * Ht * (S.inverse());
     Eigen::VectorXf x_est_vec = StateIntoVector(x, n_states_) + K * y;
     x_est_ = VectorIntoState(x_est_vec);
     (*P_) = PPred - K * (*H_) * PPred;
+    
 }
 
 State EKF::StateTransition()
@@ -132,7 +139,7 @@ State EKF::StateTransition()
     return y;
 }
 
-Eigen::MatrixXf EKF::Jacobian(State x)
+Eigen::MatrixXf EKF::Jacobian(const State& x)
 {
 
     Eigen::MatrixXf J(n_states_, n_states_);
