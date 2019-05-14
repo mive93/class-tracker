@@ -13,9 +13,10 @@ struct Data
     float x_;
     float y_;
     int frame_;
+    int class_;
 
     Data();
-    Data(float x, float y, int frame);
+    Data(float x, float y, int frame, int classification);
     void print();
 };
 

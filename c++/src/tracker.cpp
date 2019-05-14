@@ -9,6 +9,8 @@ Tracker::Tracker(const Data& first_point, int initial_age, float dt, int n_state
     r_ = rand() % 256;
     g_ = rand() % 256;
     b_ = rand() % 256;
+
+    class_ = first_point.class_;
 }
 
 EKF EFKinitialize(float dt, int n_states, const Data& first_point)

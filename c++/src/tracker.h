@@ -11,7 +11,7 @@
 
 struct Tracker
 {
-
+    
     std::vector<Data> traj_;
     std::vector<State> z_list_;
     std::vector<State> pred_list_;
@@ -20,6 +20,7 @@ struct Tracker
     int r_;
     int g_;
     int b_;
+    int class_;
     
 
     Tracker(const Data& first_point, int initial_age, float dt, int n_states);

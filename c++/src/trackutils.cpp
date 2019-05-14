@@ -11,13 +11,15 @@ Data::Data()
     x_ = 0;
     y_ = 0;
     frame_ = -1;
+    class_ = -1;
 }
 
-Data::Data(float x, float y, int frame)
+Data::Data(float x, float y, int frame, int classification)
 {
     x_ = x;
     y_ = y;
     frame_ = frame;
+    class_ = classification;
 }
 
 
