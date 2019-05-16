@@ -58,7 +58,7 @@ std::vector<std::vector<float>> computeDistance(const std::vector<Data>& old_poi
             }
             else
             {
-                if (dist < min_d)
+                if (dist < min_d && old_points[j].class_ == new_points[i].class_)
                 {
                     min_d = dist;
                     min_j = j;
@@ -150,7 +150,7 @@ void Track(const std::vector<Data>& frame, float dt, int n_states, int initial_a
         dist = knn_res[i][1];
         cur_i = knn_res[i][2];
 
-        if (prev_i <= n_cur_trajs && dist < max_distance[prev_i])
+        if (n_cur_trajs > 0 && prev_i <= n_cur_trajs && dist < max_distance[prev_i])
         {
             trackers[prev_i].traj_.push_back(frame[cur_i]);
 
