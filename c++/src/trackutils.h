@@ -1,5 +1,5 @@
-#ifndef UTILS_H
-#define UTILS_H
+#ifndef TRACKUTILS_H
+#define TRACKUTILS_H
 
 #include <vector>
 #include <string>
@@ -13,13 +13,14 @@ struct Data
     float x_;
     float y_;
     int frame_;
+    int class_;
 
     Data();
-    Data(float x, float y, int frame);
+    Data(float x, float y, int frame, int classification);
     void print();
 };
 
 std::vector<Data> readDataFromFile(std::string filename);
 
 
-#endif /*UTILS_H*/
+#endif /*TRACKUTILS_H*/
