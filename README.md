@@ -22,9 +22,8 @@ While the state transition adopted:
 ## Dependencies 
 
 ```
-sudo apt-get install libeigen3-dev
-sudo apt-get install libflann-dev
-sudo apt-get install python3-matplotlib
+sudo apt-get install libeigen3-dev libflann-dev python3-matplotlib python-dev python-dev
+
 ```
 
 ## Run the c++ code
