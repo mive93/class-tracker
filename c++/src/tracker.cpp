@@ -32,6 +32,19 @@ bool predicate(const std::vector<float>& a, const std::vector<float>& b)
     return (a[0] < b[0] || (a[0] == b[0] && a[1] < b[1]));
 }
 
+
+/* For each object in the new frame compute the distance to each object in the 
+old frame and save the smallest one. 
+
+Input
+-old_points (vector of Data): old frame onjects
+-new_points (vector of Data): new frame objects
+
+Return
+Vector of float vectors containing: 
+<old_frame_obj_index, distance, new_frame_obj_index>, 
+ordered for old_frame_obj_index first(ascending), distance second(ascending). 
+*/
 std::vector<std::vector<float>> computeDistance(const std::vector<Data>& old_points, const std::vector<Data>& new_points)
 {
 
@@ -97,8 +110,8 @@ void deleteOldTrajectories(std::vector<Tracker> &trackers, int age_threshold)
         else
         {
             std::cout << "Deleting a trajectory" << std::endl;
-            /* if (trackers[i].z_list_.size() > 10)
-                plotTruthvsPred(trackers[i].z_list_, trackers[i].pred_list_); */
+            if (trackers[i].z_list_.size() > 10)
+                plotTruthvsPred(trackers[i].z_list_, trackers[i].pred_list_); 
         }
     }
 
@@ -135,7 +148,7 @@ void Track(const std::vector<Data>& frame, float dt, int n_states, int initial_a
 
     std::vector<std::vector<float>> knn_res = computeDistance(prev_trajs, frame);
     std::vector<bool> used(knn_res.size());
-    std::vector<float> max_distance(n_cur_trajs, 50);
+    std::vector<float> max_distance(n_cur_trajs, 15);
 
     for (size_t i = 0; i < trackers.size(); i++)
         trackers[i].age_--;
@@ -207,8 +220,8 @@ void TrackOnGivenData(const std::vector<Data>& data, float dt, int n_states)
 
     std::vector<Tracker> trackers;
 
-    int initial_age = -5;
-    int age_threshold = -10;
+    int initial_age = 5;
+    int age_threshold = 0;
 
     std::cout << "Start" << std::endl;
 

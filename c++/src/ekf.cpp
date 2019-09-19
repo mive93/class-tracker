@@ -20,7 +20,7 @@ State::State(float x, float y, float yaw, float vel, float yaw_rate)
 
 void State::print()
 {
-    std::cout << x_ << " " << y_ << " " << yaw_ << " " << vel_ << " " << yaw_rate_ << std::endl;
+    std::cout <<"x: "<< x_ << "\ty: " << y_ << "\tyaw: " << yaw_ << "\tv: " << vel_ << "\tyaw rate: " << yaw_rate_ << std::endl;
 }
 
 EKF::EKF() {}
@@ -59,6 +59,7 @@ EKF::~EKF()
 
 void EKF::printInternalState()
 {
+    std::cout<<"***************Internal state*********************"<<std::endl;
     std::cout << "n_states: " << n_states_ << std::endl;
     std::cout << "dt_: " << dt_ << std::endl;
     std::cout << "P: \n"
@@ -70,6 +71,7 @@ void EKF::printInternalState()
     std::cout << "H: \n"
               << *H_ << std::endl;
     x_est_.print();
+    std::cout<<"**************************************************"<<std::endl;
 }
 
 Eigen::VectorXf StateIntoVector(const State& x, int n_states)
@@ -128,9 +130,8 @@ State EKF::StateTransition()
     }
     else
     {
-        y.x_ = x.x_ + (x.vel_ / x.yaw_rate_) * (sin(x.yaw_rate_ * dt_ * x.yaw_ - sin(x.yaw_)));
-        y.y_ = x.y_ + (x.vel_ / x.yaw_rate_) * (-cos(x.yaw_rate_ * dt_ * x.yaw_ + cos(x.yaw_)));
-        y.y_ = x.y_ + x.vel_ * dt_ * sin(x.yaw_);
+        y.x_ = x.x_ + (x.vel_ / x.yaw_rate_) * (sin(x.yaw_rate_ * dt_ + x.yaw_) - sin(x.yaw_));
+        y.y_ = x.y_ + (x.vel_ / x.yaw_rate_) * (-cos(x.yaw_rate_ * dt_ + x.yaw_) + cos(x.yaw_));
         y.yaw_ = x.yaw_ + x.yaw_rate_ * dt_;
         y.vel_ = x.vel_;
         y.yaw_rate_ = x.yaw_rate_;

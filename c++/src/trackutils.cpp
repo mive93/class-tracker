@@ -2,7 +2,7 @@
 
 void Data::print()
 {
-    std::cout<<x_<<" "<<y_<<" "<<frame_<<std::endl;
+    std::cout<<std::setprecision(10)<<"x: "<<x_<<"\ty: "<<y_<<"\tf: "<<frame_<<"\tc: "<<class_<<std::endl;
 }
 
 
