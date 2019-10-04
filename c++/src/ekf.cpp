@@ -20,26 +20,21 @@ State::State(float x, float y, float yaw, float vel, float yaw_rate)
 
 void State::print()
 {
-    std::cout <<"x: "<< x_ << "\ty: " << y_ << "\tyaw: " << yaw_ << "\tv: " << vel_ << "\tyaw rate: " << yaw_rate_ << std::endl;
+    std::cout << "x: " << x_ << "\ty: " << y_ << "\tyaw: " << yaw_ << "\tv: " << vel_ << "\tyaw rate: " << yaw_rate_ << std::endl;
 }
 
 EKF::EKF() {}
 
-EKF::EKF(int n_states, float dt, Eigen::MatrixXf *Q, Eigen::MatrixXf *R, const State& in_state)
+EKF::EKF(const int n_states, const float dt, const EKFMatrixF &Q, const EKFMatrixF &R, const State &in_state)
 {
 
     n_states_ = n_states;
     dt_ = dt;
 
-    Q_ = new Eigen::MatrixXf(n_states, n_states);
-    R_ = new Eigen::MatrixXf(n_states, n_states);
-    H_ = new Eigen::MatrixXf(n_states, n_states);
-    P_ = new Eigen::MatrixXf(n_states, n_states);
-
-    *Q_ = *Q;
-    *R_ = *R;
-    (*P_).setIdentity();
-    (*H_).setZero();
+    Q_ = Q;
+    R_ = R;
+    P_ = EKFMatrixF::Identity(n_states_, n_states_);
+    H_ = EKFMatrixF::Identity(n_states_, n_states_);
 
     x_est_ = in_state;
 }
@@ -59,24 +54,25 @@ EKF::~EKF()
 
 void EKF::printInternalState()
 {
-    std::cout<<"***************Internal state*********************"<<std::endl;
+    std::cout << "***************Internal state*********************" << std::endl;
     std::cout << "n_states: " << n_states_ << std::endl;
     std::cout << "dt_: " << dt_ << std::endl;
     std::cout << "P: \n"
-              << *P_ << std::endl;
+              << P_ << std::endl;
     std::cout << "Q: \n"
-              << *Q_ << std::endl;
+              << Q_ << std::endl;
     std::cout << "R: \n"
-              << *R_ << std::endl;
+              << R_ << std::endl;
     std::cout << "H: \n"
-              << *H_ << std::endl;
+              << H_ << std::endl;
     x_est_.print();
-    std::cout<<"**************************************************"<<std::endl;
+    std::cout << "**************************************************" << std::endl;
 }
 
-Eigen::VectorXf StateIntoVector(const State& x, int n_states)
+Eigen::VectorXf StateIntoVector(const State &x, int n_states)
 {
     Eigen::VectorXf v(n_states);
+
     v(0) = x.x_;
     v(1) = x.y_;
     v(2) = x.yaw_;
@@ -85,35 +81,37 @@ Eigen::VectorXf StateIntoVector(const State& x, int n_states)
     return v;
 }
 
-State VectorIntoState(const Eigen::VectorXf& v)
+State VectorIntoState(const Eigen::VectorXf &v)
 {
     State x(v(0), v(1), v(2), v(3), v(4));
     return x;
 }
 
-void EKF::EKFStep(const Eigen::MatrixXf& H, const Eigen::VectorXf& z)
+// State x;
+// EKF::EKFMatrixF J, PPred, Ht, S, K;
+// Eigen::VectorXf y, x_est_vec;
+
+void EKF::EKFStep(const EKFMatrixF &H, const Eigen::VectorXf &z)
 {
 
-    
-    *H_ = H;
+    H_ = H;
 
     //predict
     State x = StateTransition();
-    Eigen::MatrixXf J = Jacobian(x);
-    Eigen::MatrixXf PPred = J * (*P_) * J.transpose() + (*Q_);
+    EKFMatrixF J = Jacobian(x);
+    EKFMatrixF PPred = J * P_ * J.transpose() + Q_;
 
-    
     //update
 
-    Eigen::MatrixXf Ht = (*H_).transpose();
+    EKFMatrixF Ht = H_.transpose();
 
     Eigen::VectorXf y = z - StateIntoVector(x_est_, n_states_);
-    Eigen::MatrixXf S = (*H_) * PPred * Ht + (*R_);
-    Eigen::MatrixXf K = PPred * Ht * (S.inverse());
+    EKFMatrixF S = H_ * PPred * Ht + R_;
+    EKFMatrixF K = PPred * Ht * (S.inverse());
     Eigen::VectorXf x_est_vec = StateIntoVector(x, n_states_) + K * y;
     x_est_ = VectorIntoState(x_est_vec);
-    (*P_) = PPred - K * (*H_) * PPred;
-    
+    P_ = PPred - K * H_ * PPred;
+
 }
 
 State EKF::StateTransition()
@@ -140,10 +138,10 @@ State EKF::StateTransition()
     return y;
 }
 
-Eigen::MatrixXf EKF::Jacobian(const State& x)
+EKF::EKFMatrixF EKF::Jacobian(const State &x)
 {
 
-    Eigen::MatrixXf J(n_states_, n_states_);
+    EKFMatrixF J(n_states_, n_states_);
     J.setIdentity();
 
     J(0, 2) = (x.vel_ / x.yaw_rate_) * (cos(x.yaw_rate_ * dt_ + x.yaw_) - cos(x.yaw_));

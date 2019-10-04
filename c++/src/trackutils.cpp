@@ -2,9 +2,8 @@
 
 void Data::print()
 {
-    std::cout<<std::setprecision(10)<<"x: "<<x_<<"\ty: "<<y_<<"\tf: "<<frame_<<"\tc: "<<class_<<std::endl;
+    std::cout << std::setprecision(10) << "x: " << x_ << "\ty: " << y_ << "\tf: " << frame_ << "\tc: " << class_ << std::endl;
 }
-
 
 Data::Data()
 {
@@ -22,7 +21,6 @@ Data::Data(float x, float y, int frame, int classification)
     class_ = classification;
 }
 
-
 std::vector<Data> readDataFromFile(std::string filename)
 {
     std::ifstream file;
@@ -35,7 +33,7 @@ std::vector<Data> readDataFromFile(std::string filename)
     double east, north, up;
 
     geodetic_converter::GeodeticConverter gc;
-    gc.initialiseReference(44.655540,10.934315, 0);
+    gc.initialiseReference(44.655540, 10.934315, 0);
 
     if (file.is_open())
     {

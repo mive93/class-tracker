@@ -1,6 +1,6 @@
 #include "tracker.h"
 
-Tracker::Tracker(const Data& first_point, int initial_age, float dt, int n_states)
+Tracker::Tracker(const Data &first_point, int initial_age, float dt, int n_states)
 {
     traj_.push_back(first_point);
     age_ = initial_age;
@@ -13,25 +13,22 @@ Tracker::Tracker(const Data& first_point, int initial_age, float dt, int n_state
     class_ = first_point.class_;
 }
 
-EKF EFKinitialize(float dt, int n_states, const Data& first_point)
+EKF EFKinitialize(float dt, int n_states, const Data &first_point)
 {
-    Eigen::MatrixXf *Q = new Eigen::MatrixXf(n_states, n_states);
-    Eigen::MatrixXf *R = new Eigen::MatrixXf(n_states, n_states);
-    (*Q).setZero();
-    (*R).setZero();
-    (*Q).diagonal() << pow(1 * dt, 2), pow(1 * dt, 2), pow(1 * dt, 2), pow(3 * dt, 2), pow(0.1 * dt, 2);
-    (*R).diagonal() << pow(0.5, 2), pow(0.5, 2), pow(0.1, 2), pow(0.5, 2), pow(0.02, 2);
+    EKF::EKFMatrixF Q = EKF::EKFMatrixF::Zero(n_states, n_states);
+    EKF::EKFMatrixF R = EKF::EKFMatrixF::Zero(n_states, n_states);
+    Q.diagonal() << pow(1 * dt, 2), pow(1 * dt, 2), pow(1 * dt, 2), pow(3 * dt, 2), pow(0.1 * dt, 2);
+    R.diagonal() << pow(0.5, 2), pow(0.5, 2), pow(0.1, 2), pow(0.5, 2), pow(0.02, 2);
     State s(first_point.x_, first_point.y_, 0, 0, 0);
     EKF ekf(n_states, dt, Q, R, s);
     //ekf.printInternalState();
     return ekf;
 }
 
-bool predicate(const std::vector<float>& a, const std::vector<float>& b)
+bool predicate(const std::vector<float> &a, const std::vector<float> &b)
 {
     return (a[0] < b[0] || (a[0] == b[0] && a[1] < b[1]));
 }
-
 
 /* For each object in the new frame compute the distance to each object in the 
 old frame and save the smallest one. 
@@ -45,7 +42,7 @@ Vector of float vectors containing:
 <old_frame_obj_index, distance, new_frame_obj_index>, 
 ordered for old_frame_obj_index first(ascending), distance second(ascending). 
 */
-std::vector<std::vector<float>> computeDistance(const std::vector<Data>& old_points, const std::vector<Data>& new_points)
+std::vector<std::vector<float>> computeDistance(const std::vector<Data> &old_points, const std::vector<Data> &new_points)
 {
 
     /* for(auto o: old_points)
@@ -111,14 +108,14 @@ void deleteOldTrajectories(std::vector<Tracker> &trackers, int age_threshold)
         {
             std::cout << "Deleting a trajectory" << std::endl;
             if (trackers[i].z_list_.size() > 10)
-                plotTruthvsPred(trackers[i].z_list_, trackers[i].pred_list_); 
+                plotTruthvsPred(trackers[i].z_list_, trackers[i].pred_list_);
         }
     }
 
     trackers.swap(valid_trackers);
 }
 
-void addNewTrajectories(std::vector<Tracker> &trackers, const std::vector<Data>& frame, const std::vector<bool>& used, const std::vector<std::vector<float>>& knn_res, int initial_age, int n_states, float dt)
+void addNewTrajectories(std::vector<Tracker> &trackers, const std::vector<Data> &frame, const std::vector<bool> &used, const std::vector<std::vector<float>> &knn_res, int initial_age, int n_states, float dt)
 {
     //add new trajectories
     for (size_t i = 0; i < knn_res.size(); i++)
@@ -131,10 +128,9 @@ void addNewTrajectories(std::vector<Tracker> &trackers, const std::vector<Data>&
     }
 }
 
-void Track(const std::vector<Data>& frame, float dt, int n_states, int initial_age, int age_threshold, std::vector<Tracker> &trackers)
+void Track(const std::vector<Data> &frame, float dt, int n_states, int initial_age, int age_threshold, std::vector<Tracker> &trackers)
 {
 
-    
     //delete trajectories not recently updated
     deleteOldTrajectories(trackers, age_threshold);
 
@@ -153,8 +149,6 @@ void Track(const std::vector<Data>& frame, float dt, int n_states, int initial_a
     for (size_t i = 0; i < trackers.size(); i++)
         trackers[i].age_--;
 
-    
-    
     int prev_i, cur_i;
     float dist;
     for (size_t i = 0; i < knn_res.size(); i++)
@@ -173,10 +167,9 @@ void Track(const std::vector<Data>& frame, float dt, int n_states, int initial_a
             used[i] = 1;
         }
     }
-    
 
     //Kalman step
-    Eigen::MatrixXf H = Eigen::MatrixXf::Zero(n_states, n_states);
+    EKF::EKFMatrixF H = EKF::EKFMatrixF::Zero(n_states, n_states);
     Eigen::VectorXf z(n_states);
 
     for (size_t i = 0; i < new_trajs.size(); i++)
@@ -196,24 +189,17 @@ void Track(const std::vector<Data>& frame, float dt, int n_states, int initial_a
             trackers[i].z_list_.push_back(State(new_trajs[i].x_, new_trajs[i].y_, 0, 0, 0));
         }
 
-        
-
         //trackers[i].ekf_.printInternalState();
         trackers[i].ekf_.EKFStep(H, z);
-        
-        trackers[i].pred_list_.push_back(trackers[i].ekf_.getEstimatedState());
 
-        
+        trackers[i].pred_list_.push_back(trackers[i].ekf_.getEstimatedState());
     }
 
-    
     //Add new trajectories from points from the current frame that were not associated
     addNewTrajectories(trackers, frame, used, knn_res, initial_age, n_states, dt);
-
-    
 }
 
-void TrackOnGivenData(const std::vector<Data>& data, float dt, int n_states)
+void TrackOnGivenData(const std::vector<Data> &data, float dt, int n_states)
 {
     int frame_id = 0;
     std::vector<Data> cur_frame;

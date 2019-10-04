@@ -23,5 +23,4 @@ struct Data
 
 std::vector<Data> readDataFromFile(std::string filename);
 
-
 #endif /*TRACKUTILS_H*/

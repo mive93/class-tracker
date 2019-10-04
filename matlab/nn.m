@@ -115,9 +115,10 @@ end
 for j=1:size(traj,2)
     %traj{j} = rmoutliers(traj{j})
     figure;
-    plot(zList{j}(:, 1), zList{j}(:,2), 'r--');
+    plot(zList{j}(:, 1), zList{j}(:,2), 'r');
     hold on;
     plot(predList{j}(:, 1), predList{j}(:,2), 'g');
+    legend('groundtruth','prediction')
 %     plot(traj{j}(:,1), traj{j}(:,2), 'r');
 end
 
@@ -182,6 +183,7 @@ function [cleanTraj, cleanAge, ekfClean, zClean, predClean] = deleteOldTraj(traj
                 hold on;
                 plot(predList{i}(:, 1), predList{i}(:,2), 'g');
 %                 plot(traj{i}(:,1), traj{i}(:,2), 'b');
+                legend('groundtruth','prediction')
             end
         end
     end

@@ -32,7 +32,16 @@ git clone https://github.com/mive93/tracker_CLASS
 cd tracker_CLASS/c++
 mkdir build
 cd build
-cmake ..
+```
+build in Release or Debug with one the following commands
+
+```
+cmake -DCMAKE_BUILD_TYPE=Release .. 
+cmake -DCMAKE_BUILD_TYPE=Debug .. 
+```
+
+and finally
+```
 make
 ./tracker
 ```
