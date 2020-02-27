@@ -202,7 +202,7 @@ void Track(const std::vector<Data> &frame, float dt, int n_states, int initial_a
     addNewTrajectories(trackers, frame, used, knn_res, initial_age, n_states, dt);
 }
 
-void TrackOnGivenData(const std::vector<Data> &data, float dt, int n_states, float verbose)
+void TrackOnGivenData(const std::vector<Data> &data, float dt, int n_states, bool verbose)
 {
     int frame_id = 0;
     std::vector<Data> cur_frame;

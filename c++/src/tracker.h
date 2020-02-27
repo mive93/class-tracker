@@ -27,6 +27,6 @@ std::vector<std::vector<float>> computeDistance(const std::vector<Data> &old_poi
 void deleteOldTrajectories(std::vector<Tracker> &trackers, int age_threshold, bool verbose=false);
 void addNewTrajectories(std::vector<Tracker> &trackers, const std::vector<Data> &frame, const std::vector<bool> &used, const std::vector<std::vector<float>> &knn_res, int initial_age, int n_states, float dt);
 void Track(const std::vector<Data> &frame, float dt, int n_states, int initial_age, int age_threshold, std::vector<Tracker> &trackers, bool verbose=false);
-void TrackOnGivenData(const std::vector<Data> &data, float dt, int n_states, float verbose=false);
+void TrackOnGivenData(const std::vector<Data> &data, float dt, int n_states, bool verbose=false);
 
 #endif /*TRACKER_H*/
