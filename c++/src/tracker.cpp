@@ -131,7 +131,7 @@ void addNewTrajectories(std::vector<Tracker> &trackers, const std::vector<Data> 
     }
 }
 
-void Track(const std::vector<Data> &frame, float dt, int n_states, int initial_age, int age_threshold, std::vector<Tracker> &trackers, float verbose)
+void Track(const std::vector<Data> &frame, float dt, int n_states, int initial_age, int age_threshold, std::vector<Tracker> &trackers, bool verbose)
 {
 
     //delete trajectories not recently updated
