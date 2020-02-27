@@ -22,7 +22,7 @@ While the state transition adopted:
 ## Dependencies 
 
 ```
-sudo apt-get install libeigen3-dev libflann-dev python3-matplotlib python-dev python-dev
+sudo apt-get install libeigen3-dev libflann-dev python3-matplotlib python-dev python-dev libflann-dev
 
 ```
 

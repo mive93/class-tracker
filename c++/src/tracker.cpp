@@ -94,7 +94,7 @@ std::vector<std::vector<float>> computeDistance(const std::vector<Data> &old_poi
     return knn_res;
 }
 
-void deleteOldTrajectories(std::vector<Tracker> &trackers, int age_threshold)
+void deleteOldTrajectories(std::vector<Tracker> &trackers, int age_threshold, bool verbose)
 {
     std::vector<Tracker> valid_trackers;
 
@@ -106,9 +106,12 @@ void deleteOldTrajectories(std::vector<Tracker> &trackers, int age_threshold)
         }
         else
         {
-            std::cout << "Deleting a trajectory" << std::endl;
-            if (trackers[i].z_list_.size() > 10)
-                plotTruthvsPred(trackers[i].z_list_, trackers[i].pred_list_);
+            if(verbose)
+            {
+                std::cout << "Deleting a trajectory" << std::endl;
+                if (trackers[i].z_list_.size() > 10)
+                    plotTruthvsPred(trackers[i].z_list_, trackers[i].pred_list_);
+            }
         }
     }
 
@@ -128,11 +131,11 @@ void addNewTrajectories(std::vector<Tracker> &trackers, const std::vector<Data> 
     }
 }
 
-void Track(const std::vector<Data> &frame, float dt, int n_states, int initial_age, int age_threshold, std::vector<Tracker> &trackers)
+void Track(const std::vector<Data> &frame, float dt, int n_states, int initial_age, int age_threshold, std::vector<Tracker> &trackers, float verbose)
 {
 
     //delete trajectories not recently updated
-    deleteOldTrajectories(trackers, age_threshold);
+    deleteOldTrajectories(trackers, age_threshold, verbose);
 
     //NN: associate new points with prevoius trajectories
     std::vector<Data> prev_trajs;
@@ -199,7 +202,7 @@ void Track(const std::vector<Data> &frame, float dt, int n_states, int initial_a
     addNewTrajectories(trackers, frame, used, knn_res, initial_age, n_states, dt);
 }
 
-void TrackOnGivenData(const std::vector<Data> &data, float dt, int n_states)
+void TrackOnGivenData(const std::vector<Data> &data, float dt, int n_states, float verbose)
 {
     int frame_id = 0;
     std::vector<Data> cur_frame;
@@ -226,7 +229,7 @@ void TrackOnGivenData(const std::vector<Data> &data, float dt, int n_states)
             else //tracking
             {
 
-                Track(cur_frame, dt, n_states, initial_age, age_threshold, trackers);
+                Track(cur_frame, dt, n_states, initial_age, age_threshold, trackers, verbose);
             }
 
             cur_frame.clear();
@@ -235,9 +238,12 @@ void TrackOnGivenData(const std::vector<Data> &data, float dt, int n_states)
         cur_frame.push_back(d);
     }
 
-    for (size_t i = 0; i < trackers.size(); i++)
-        if (trackers[i].z_list_.size() > 10)
-            plotTruthvsPred(trackers[i].z_list_, trackers[i].pred_list_);
+    if(verbose)
+    {
+        for (size_t i = 0; i < trackers.size(); i++)
+            if (trackers[i].z_list_.size() > 10)
+                plotTruthvsPred(trackers[i].z_list_, trackers[i].pred_list_);
+    }
 
     std::cout << "End." << std::endl;
 }

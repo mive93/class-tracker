@@ -50,7 +50,7 @@ int main(int argc, char **argv)
 
     float dt = 0.03;
     int n_states = 5;
-    TrackOnGivenData(data, dt, n_states);
+    TrackOnGivenData(data, dt, n_states, true);
 
     return EXIT_SUCCESS;
 }
