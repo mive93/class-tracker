@@ -1,3 +1,5 @@
+//all credits to https://github.com/ethz-asl/geodetic_utils/blob/master/geodetic_utils/include/geodetic_utils/geodetic_conv.hpp
+
 #ifndef GEODETIC_CONVERTER_H_
 #define GEODETIC_CONVERTER_H_
 

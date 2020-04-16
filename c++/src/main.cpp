@@ -1,9 +1,9 @@
 #include <iostream>
 #include <eigen3/Eigen/Core>
 #include "ekf.h"
-#include "trackutils.h"
+#include "Data.h"
 #include "plot.h"
-#include "tracker.h"
+#include "Tracking.h"
 
 #include <flann/flann.h>
 
@@ -48,9 +48,15 @@ int main(int argc, char **argv)
 
     //testMatplotlib();
 
+
     float dt = 0.03;
     int n_states = 5;
-    TrackOnGivenData(data, dt, n_states, true);
+    int initial_age = 5;
+    int age_threshold = 0;
+    bool verbose = true;
+
+    Tracking t(n_states, dt, initial_age, age_threshold);
+    t.TrackOnGivenData(data, verbose);
 
     return EXIT_SUCCESS;
 }

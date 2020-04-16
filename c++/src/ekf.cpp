@@ -1,23 +1,5 @@
 #include "ekf.h"
 
-State::State()
-{
-    x_ = 0;
-    y_ = 0;
-    yaw_ = 0;
-    vel_ = 0;
-    yaw_rate_ = 0;
-}
-
-State::State(float x, float y, float yaw, float vel, float yaw_rate)
-{
-    x_ = x;
-    y_ = y;
-    yaw_ = yaw;
-    vel_ = vel;
-    yaw_rate_ = yaw_rate;
-}
-
 void State::print()
 {
     std::cout << "x: " << x_ << "\ty: " << y_ << "\tyaw: " << yaw_ << "\tv: " << vel_ << "\tyaw rate: " << yaw_rate_ << std::endl;
@@ -93,7 +75,6 @@ State VectorIntoState(const Eigen::VectorXf &v)
 
 void EKF::EKFStep(const EKFMatrixF &H, const Eigen::VectorXf &z)
 {
-
     H_ = H;
 
     //predict
@@ -111,7 +92,6 @@ void EKF::EKFStep(const EKFMatrixF &H, const Eigen::VectorXf &z)
     Eigen::VectorXf x_est_vec = StateIntoVector(x, n_states_) + K * y;
     x_est_ = VectorIntoState(x_est_vec);
     P_ = PPred - K * H_ * PPred;
-
 }
 
 State EKF::StateTransition()

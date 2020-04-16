@@ -1,3 +1,5 @@
+//all credits to https://github.com/lava/matplotlib-cpp/blob/master/matplotlibcpp.h
+
 #ifndef MATPLOTLIBCPP_H
 #define MATPLOTLIBCPP_H
 

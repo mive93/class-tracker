@@ -1,27 +1,11 @@
-#include "trackutils.h"
+#include "Data.h"
 
 void Data::print()
 {
     std::cout << std::setprecision(10) << "x: " << x_ << "\ty: " << y_ << "\tf: " << frame_ << "\tc: " << class_ << std::endl;
 }
 
-Data::Data()
-{
-    x_ = 0;
-    y_ = 0;
-    frame_ = -1;
-    class_ = -1;
-}
-
-Data::Data(float x, float y, int frame, int classification)
-{
-    x_ = x;
-    y_ = y;
-    frame_ = frame;
-    class_ = classification;
-}
-
-std::vector<Data> readDataFromFile(std::string filename)
+std::vector<Data> readDataFromFile(const std::string filename)
 {
     std::ifstream file;
     file.open(filename);
@@ -33,7 +17,7 @@ std::vector<Data> readDataFromFile(std::string filename)
     double east, north, up;
 
     geodetic_converter::GeodeticConverter gc;
-    gc.initialiseReference(44.655540, 10.934315, 0);
+    gc.initialiseReference(44.655540, 10.934315, 0); //set the origin (centre)
 
     if (file.is_open())
     {
