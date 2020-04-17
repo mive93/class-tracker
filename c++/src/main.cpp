@@ -5,8 +5,6 @@
 #include "plot.h"
 #include "Tracking.h"
 
-#include <flann/flann.h>
-
 void EKFtest()
 {
     std::cout << "This is a test" << std::endl;
