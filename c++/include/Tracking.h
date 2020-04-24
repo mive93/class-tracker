@@ -33,8 +33,6 @@ std::vector<Knn_infos> computeDistance(const std::vector<Data> &old_points, cons
 
 class Tracking
 {
-    std::vector<Tracker> trackers_;
-
     bool * tracker_indexes_ = nullptr;
     int cur_index           = 0;
     int ekf_states_         = 5;
@@ -50,6 +48,8 @@ class Tracking
     
 
 public:
+    std::vector<Tracker> trackers_;
+
     Tracking(const int n_states = 5, const float dt = 0.03, const int initial_age = 5, const int age_threshold = 0);
     ~Tracking();
     void Track(const std::vector<Data> &frame, bool verbose=false);

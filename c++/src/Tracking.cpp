@@ -62,7 +62,7 @@ Tracking::Tracking(const int n_states, const float dt, const int initial_age, co
 }
 Tracking::~Tracking() 
 {
-    delete[] tracker_indexes_;
+    // delete[] tracker_indexes_; //FIXME
 }
 
 void Tracking::deleteOldTrajectories(bool verbose)
