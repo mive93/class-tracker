@@ -2,19 +2,21 @@
 #define TRACKING_H
 
 #include "ekf.h"
-#include "Data.h"
+#include "obj.h"
 #include "plot.h"
 #include "Tracker.h"
 #include <cstdlib>
 
-struct Knn_infos
+namespace tracking{
+
+struct knn_infos
 {
-    int obj_id_prev_   = -1;
-    int obj_id_curr_   = -1;
-    float dist_        =  0;  //distance
+    int objIdPrev   = -1;
+    int objIdCurr   = -1;
+    float dist      =  0;  //distance
 };
 
-bool compareKnn_infos(const Knn_infos & a, const Knn_infos& b);
+bool compareKnn_infos(const knn_infos & a, const knn_infos& b);
 
 /* For each object in the new frame this method computes the distance from 
     * each object in the old frame and save the smallest one. 
@@ -27,35 +29,38 @@ bool compareKnn_infos(const Knn_infos & a, const Knn_infos& b);
     * <old_frame_obj_index, distance, new_frame_obj_index>, 
     * ordered for old_frame_obj_index first(ascending), distance second(ascending). 
     */
-std::vector<Knn_infos> computeDistance(const std::vector<Data> &old_points, const std::vector<Data> &new_points);
+std::vector<knn_infos> computeDistance(const std::vector<obj_m> &old_points, const std::vector<obj_m> &new_points);
 
 #define MAX_INDEX 2048
 
 class Tracking
 {
-    bool * tracker_indexes_ = nullptr;
-    int cur_index           = 0;
-    int ekf_states_         = 5;
-    int initial_age_        = 5;
-    int age_threshold_      = 0;
-    float dt_               = 0;
+    bool * trackerIndexes   = nullptr;
+    int curIndex            = 0;
+    int ekfStates           = 5;
+    int initialAge          = 5;
+    int ageThreshold        = 0;
+    float dt                = 0;
 
     void deleteOldTrajectories(bool verbose=false);
-    void addNewTrajectories(const std::vector<Data> &frame, const std::vector<bool> &used, const std::vector<Knn_infos> &knn_res, bool verbose=false);
-    void nearestNeighbor(const std::vector<Data> &frame, std::vector<Knn_infos>& knn_res, std::vector<bool>& used, std::vector<Data>& new_trajs);
-    void kalmanStep(const std::vector<Data>& new_trajs);
+    void addNewTrajectories(const std::vector<obj_m> &frame, const std::vector<bool> &used, const std::vector<knn_infos> &knn_res, bool verbose=false);
+    void nearestNeighbor(const std::vector<obj_m> &frame, std::vector<knn_infos>& knn_res, std::vector<bool>& used, std::vector<obj_m>& new_trajs);
+    void kalmanStep(const std::vector<obj_m>& new_trajs);
     int getTrackerIndex();
     
 
 public:
-    std::vector<Tracker> trackers_;
+    std::vector<Tracker> trackers;
 
-    Tracking(const int n_states = 5, const float dt = 0.03, const int initial_age = 5, const int age_threshold = 0);
+    Tracking(const int n_states = 5, const float dt_ = 0.03, const int initial_age = 5);
     ~Tracking();
-    void Track(const std::vector<Data> &frame, bool verbose=false);
-    void TrackOnGivenData(const std::vector<Data> &data, bool verbose=false);
+    void track(const std::vector<obj_m> &frame, bool verbose=false);
+    void trackOnGivenData(const std::vector<obj_m> &data, bool verbose=false);
     std::vector<Tracker> getTrackers();
+    void setAgeThreshold(const int age_threshold);
 
 };
+
+}
 
 #endif /*TRACKING_H*/

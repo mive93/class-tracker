@@ -1,7 +1,6 @@
 #include "plot.h"
 
-void testMatplotlib()
-{
+void testMatplotlib(){
     const std::string name = "ciao";
     std::vector<int> x, y;
     x.push_back(1);
@@ -23,40 +22,34 @@ void testMatplotlib()
     matplotlibcpp::show();
 }
 
-void plotTrajectory(std::vector<Data> trajectory)
-{
+void plotTrajectory(std::vector<tracking::obj_m> trajectory){
     std::vector<float> x;
     std::vector<float> y;
-    for (auto d : trajectory)
-    {
-        x.push_back(d.x_);
-        y.push_back(d.y_);
+    for (auto d : trajectory){
+        x.push_back(d.x);
+        y.push_back(d.y);
     }
     matplotlibcpp::plot(x, y);
     for (auto d : trajectory)
-        matplotlibcpp::annotate(std::to_string(d.frame_), d.x_, d.y_);
+        matplotlibcpp::annotate(std::to_string(d.frame), d.x, d.y);
     matplotlibcpp::title("Trajectory");
 
     matplotlibcpp::show();
 }
 
-void plotTruthvsPred(std::vector<State> groudtruth, std::vector<State> prediction)
-{
-
+void plotTruthvsPred(std::vector<tracking::state> groudtruth, std::vector<tracking::state> prediction){
     std::vector<float> x_gt;
     std::vector<float> y_gt;
-    for (auto gt : groudtruth)
-    {
-        x_gt.push_back(gt.x_);
-        y_gt.push_back(gt.y_);
+    for (auto gt : groudtruth){
+        x_gt.push_back(gt.x);
+        y_gt.push_back(gt.y);
     }
 
     std::vector<float> x_pr;
     std::vector<float> y_pr;
-    for (auto pr : prediction)
-    {
-        x_pr.push_back(pr.x_);
-        y_pr.push_back(pr.y_);
+    for (auto pr : prediction){
+        x_pr.push_back(pr.x);
+        y_pr.push_back(pr.y);
     }
 
     matplotlibcpp::named_plot("Groundtruth", x_gt, y_gt, "r--");

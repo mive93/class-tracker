@@ -3,10 +3,10 @@
 
 #include "matplotlibcpp.h"
 #include "ekf.h"
-#include "Data.h"
+#include "obj.h"
 
 void testMatplotlib();
-void plotTrajectory(std::vector<Data> trajectory);
-void plotTruthvsPred(std::vector<State> groudtruth, std::vector<State> prediction);
+void plotTrajectory(std::vector<tracking::obj_m> trajectory);
+void plotTruthvsPred(std::vector<tracking::state> groudtruth, std::vector<tracking::state> prediction);
 
 #endif /*PLOT_H*/

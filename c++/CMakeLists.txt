@@ -15,5 +15,5 @@ target_link_libraries(class-tracker ${class-tracker-LIBS} )
 #-------------------------------------------------------------------------------
 # Build executables
 #-------------------------------------------------------------------------------
-add_executable(tracker src/main.cpp)
+add_executable(tracker demo/main.cpp)
 target_link_libraries(tracker class-tracker)

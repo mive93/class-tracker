@@ -2,29 +2,32 @@
 #define TRACKER_H
 
 #include "ekf.h"
-#include "Data.h"
+#include "obj.h"
 #include <cstdlib>
 
+
+namespace tracking {
 class Tracker
 {
 public:
-    std::vector<Data> traj_;
-    std::vector<State> z_list_;
-    std::vector<State> pred_list_;
-    EKF ekf_;
-    int age_;
-    int r_;
-    int g_;
-    int b_;
-    int class_;
-    int id_;
+    std::vector<obj_m> traj;
+    std::vector<state> zList;
+    std::vector<state> predList;
+    EKF ekf;
+    int age;
+    int r;
+    int g;
+    int b;
+    int cl;
+    int id;
 
-    Tracker(const Data &first_point, const int initial_age, const float dt, const int n_states, const int id);
+    Tracker(const obj_m &first_point, const int initial_age, const float dt, const int n_states, const int id_);
 
 private:
     Tracker();
-    EKF EFKinitialize(const float dt, const int n_states, const Data &first_point);
-
+    EKF ekfInitialize(const float dt, const int n_states, const obj_m &first_point);
 };
+
+}
 
 #endif /*TRACKER_H*/
