@@ -31,7 +31,7 @@ bool compareKnn_infos(const knn_infos & a, const knn_infos& b);
     */
 std::vector<knn_infos> computeDistance(const std::vector<obj_m> &old_points, const std::vector<obj_m> &new_points);
 
-#define MAX_INDEX 2048
+#define MAX_INDEX 32767
 
 class Tracking
 {
