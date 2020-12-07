@@ -10,12 +10,12 @@
 namespace tracking{
 /*Object in meters*/
 struct obj_m{
-    float x     = 0;
-    float y     = 0;
-    int frame   = -1;
-    int cl      = -1;
-    int w       = 0;
-    int h       = 0;
+    float x         = 0;
+    float y         = 0;
+    int frame       = -1;
+    int cl          = -1;
+    int w           = 0;
+    int h           = 0;
     float precision = 0.0;
 
     obj_m(){}

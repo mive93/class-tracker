@@ -22,7 +22,7 @@ void testMatplotlib(){
     matplotlibcpp::show();
 }
 
-void plotTrajectory(std::vector<tracking::obj_m> trajectory){
+void plotTrajectory(std::deque<tracking::obj_m> trajectory){
     std::vector<float> x;
     std::vector<float> y;
     for (auto d : trajectory){
@@ -37,7 +37,7 @@ void plotTrajectory(std::vector<tracking::obj_m> trajectory){
     matplotlibcpp::show();
 }
 
-void plotTruthvsPred(std::vector<tracking::state> groudtruth, std::vector<tracking::state> prediction){
+void plotTruthvsPred(std::deque<tracking::state> groudtruth, std::deque<tracking::state> prediction){
     std::vector<float> x_gt;
     std::vector<float> y_gt;
     for (auto gt : groudtruth){
