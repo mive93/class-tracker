@@ -4,15 +4,17 @@
 #include "ekf.h"
 #include "obj.h"
 #include <cstdlib>
+#include <deque>
 
+#define MAX_HISTORY 200 
 
 namespace tracking {
 class Tracker
 {
 public:
-    std::vector<obj_m> traj;
-    std::vector<state> zList;
-    std::vector<state> predList;
+    std::deque<obj_m> traj;
+    std::deque<state> zList;
+    std::deque<state> predList;
     EKF ekf;
     int age;
     int r;

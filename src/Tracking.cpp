@@ -113,6 +113,7 @@ void Tracking::nearestNeighbor(const std::vector<obj_m> &frame, std::vector<knn_
 
         if (n_cur_trajs > 0 && prev_i <= n_cur_trajs && dist < max_distance[prev_i]){
             trackers[prev_i].traj.push_back(frame[cur_i]);
+            if(trackers[prev_i].traj.size() > MAX_HISTORY) trackers[prev_i].traj.pop_front();
 
             new_trajs[prev_i] = frame[cur_i];
             max_distance[prev_i] = dist;
@@ -137,12 +138,14 @@ void Tracking::kalmanStep(const std::vector<obj_m>& new_trajs){
             H(0, 0) = 1;
             H(1, 1) = 1;
             trackers[i].zList.push_back(state(new_trajs[i].x, new_trajs[i].y, 0, 0, 0));
+            if(trackers[i].zList.size() > MAX_HISTORY) trackers[i].zList.pop_front();
         }
 
         //trackers[i].ekf.printInternalState();
         trackers[i].ekf.ekfStep(H, z);
 
         trackers[i].predList.push_back(trackers[i].ekf.getEstimatedState());
+        if(trackers[i].predList.size() > MAX_HISTORY) trackers[i].predList.pop_front();
     }
 }
 

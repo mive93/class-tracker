@@ -4,9 +4,10 @@
 #include "matplotlibcpp.h"
 #include "ekf.h"
 #include "obj.h"
+#include <deque>
 
 void testMatplotlib();
-void plotTrajectory(std::vector<tracking::obj_m> trajectory);
-void plotTruthvsPred(std::vector<tracking::state> groudtruth, std::vector<tracking::state> prediction);
+void plotTrajectory(std::deque<tracking::obj_m> trajectory);
+void plotTruthvsPred(std::deque<tracking::state> groudtruth, std::deque<tracking::state> prediction);
 
 #endif /*PLOT_H*/
