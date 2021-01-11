@@ -1,9 +1,10 @@
-#ifndef EKF_H
-#define EKF_H
+#ifndef UKF_H
+#define UKF_H
 
 #include <vector>
 #include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/LU>
+#include <eigen3/Eigen/Cholesky>
 #include <iostream>
 
 #include <iomanip>
@@ -25,31 +26,30 @@ struct state
   void print();
 };
 
-class EKF
+class UKF
 {
 public:
-  using EKFMatrixF = Eigen::Matrix<float, -1, -1>;
+  using UKFMatrixF = Eigen::Matrix<float, -1, -1>;
 
-  EKF();
-  EKF(const int n_states, const float dt_, const EKFMatrixF &Q_, const EKFMatrixF &R_, const state &in_state);
-  ~EKF();
+  UKF();
+  UKF(const int n_states, const float dt_, const UKFMatrixF &Q_, const UKFMatrixF &R_, const state &in_state);
+  ~UKF();
   void printInternalState();
-  void ekfStep(const EKFMatrixF &H_, const Eigen::VectorXf &z);
+  void ukfStep(const UKFMatrixF &H_, const Eigen::VectorXf &z);
   state getEstimatedState();
 
 private:
   int nStates;
   float dt;
   state xEst;
-  EKFMatrixF Q;
-  EKFMatrixF R;
-  EKFMatrixF P;
-  EKFMatrixF H;
+  UKFMatrixF Q;
+  UKFMatrixF R;
+  UKFMatrixF P;
+  UKFMatrixF H;
 
-  state stateTransition();
-  EKFMatrixF jacobian(const state &x);
+  state stateTransition(const state &x);
 };
 
 }
 
-#endif /*EKF_H*/
+#endif /*UKF_H*/

@@ -1,7 +1,7 @@
 #ifndef TRACKING_H
 #define TRACKING_H
 
-#include "ekf.h"
+#include "ukf.h"
 #include "obj.h"
 #include "plot.h"
 #include "Tracker.h"
@@ -37,7 +37,7 @@ class Tracking
 {
     bool * trackerIndexes   = nullptr;
     int curIndex            = 0;
-    int ekfStates           = 5;
+    int ukfStates           = 5;
     int initialAge          = 5;
     int ageThreshold        = 0;
     float dt                = 0;

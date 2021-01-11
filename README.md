@@ -2,13 +2,9 @@
 
   
 
-This is an implementation of an Extended Kalman Filter based tracker.
+This is an implementation of an Unscented Kalman Filter based tracker.
 
-There is both an implementation in C++ and in Matlab.
 
-The idea was to develop a fast method to track objects from a pole-mounted camera. A visual tracker would have been too slow, therefore an EFK has been adopted. The idea is that after a Convolutional Neural Network (CNN) detects the bounding-boxes of the objects, the central bottom point of the bounding box is taken as a reference of that object and on that the tracker is instantiated.
-
-However, the tracker implementation is general, but takes as input a point for an object for each frame and track those objects with an aging mechanism.
 
 The idea is to use just the position of the object (x,y) to predict not only the new position (x’,y’), but also the velocity v the yaw ![equation](https://latex.codecogs.com/gif.latex?%5Cpsi), and the yaw-rate ![equation](https://latex.codecogs.com/gif.latex?%5Cdot%5Cpsi). Hence, the state of EKF is: 
 

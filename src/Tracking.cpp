@@ -48,7 +48,7 @@ std::vector<knn_infos> computeDistance(const std::vector<obj_m> &old_points, con
     return knn_res;
 }
 
-Tracking::Tracking(const int n_states, const float dt_, const int initial_age) : ekfStates(n_states), dt(dt_), initialAge(initial_age){
+Tracking::Tracking(const int n_states, const float dt_, const int initial_age) : ukfStates(n_states), dt(dt_), initialAge(initial_age){
     trackerIndexes = new bool[MAX_INDEX];
     for(int i=0; i<MAX_INDEX; ++i)
         trackerIndexes[i]= false;
@@ -81,7 +81,7 @@ void Tracking::deleteOldTrajectories(bool verbose){
 void Tracking::addNewTrajectories(const std::vector<obj_m> &frame, const std::vector<bool> &used, const std::vector<knn_infos> &knn_res, bool verbose){
     for (size_t i = 0; i < knn_res.size(); ++i){
         if (!used[i]){
-            trackers.push_back(Tracker(frame[knn_res[i].objIdCurr], initialAge, dt, ekfStates, this->getTrackerIndex()));
+            trackers.push_back(Tracker(frame[knn_res[i].objIdCurr], initialAge, dt, ukfStates, this->getTrackerIndex()));
             if(verbose)
                 std::cout << "Adding tracker " << trackers[trackers.size()-1].id<< std::endl;
         }
@@ -92,7 +92,7 @@ void Tracking::nearestNeighbor(const std::vector<obj_m> &frame, std::vector<knn_
     
     std::vector<obj_m> prev_trajs;
     for (auto t : trackers)
-        prev_trajs.push_back(t.traj.back());
+        prev_trajs.push_back(t.trajEkf.back());
 
     int n_cur_trajs = prev_trajs.size();
     new_trajs.resize(n_cur_trajs);
@@ -113,8 +113,6 @@ void Tracking::nearestNeighbor(const std::vector<obj_m> &frame, std::vector<knn_
 
         if (n_cur_trajs > 0 && prev_i <= n_cur_trajs && dist < max_distance[prev_i]){
             trackers[prev_i].traj.push_back(frame[cur_i]);
-            if(trackers[prev_i].traj.size() > MAX_HISTORY) trackers[prev_i].traj.pop_front();
-
             new_trajs[prev_i] = frame[cur_i];
             max_distance[prev_i] = dist;
             trackers[prev_i].age += 1;
@@ -124,8 +122,8 @@ void Tracking::nearestNeighbor(const std::vector<obj_m> &frame, std::vector<knn_
 }
 
 void Tracking::kalmanStep(const std::vector<obj_m>& new_trajs){
-    EKF::EKFMatrixF H = EKF::EKFMatrixF::Zero(ekfStates, ekfStates);
-    Eigen::VectorXf z(ekfStates);
+    UKF::UKFMatrixF H = UKF::UKFMatrixF::Zero(ukfStates, ukfStates);
+    Eigen::VectorXf z(ukfStates);
 
     for (size_t i = 0; i < new_trajs.size(); i++){
         z << new_trajs[i].x, new_trajs[i].y, 0, 0, 0;
@@ -138,14 +136,13 @@ void Tracking::kalmanStep(const std::vector<obj_m>& new_trajs){
             H(0, 0) = 1;
             H(1, 1) = 1;
             trackers[i].zList.push_back(state(new_trajs[i].x, new_trajs[i].y, 0, 0, 0));
-            if(trackers[i].zList.size() > MAX_HISTORY) trackers[i].zList.pop_front();
         }
 
-        //trackers[i].ekf.printInternalState();
-        trackers[i].ekf.ekfStep(H, z);
+        //trackers[i].ukf.printInternalState();
+        trackers[i].ukf.ukfStep(H, z);
+        trackers[i].predList.push_back(trackers[i].ukf.getEstimatedState());
 
-        trackers[i].predList.push_back(trackers[i].ekf.getEstimatedState());
-        if(trackers[i].predList.size() > MAX_HISTORY) trackers[i].predList.pop_front();
+        trackers[i].trajEkf.push_back(obj_m(trackers[i].ukf.getEstimatedState().x, trackers[i].ukf.getEstimatedState().y, trackers[i].traj.back().frame, trackers[i].traj.back().cl, 0, 0));        
     }
 }
 
