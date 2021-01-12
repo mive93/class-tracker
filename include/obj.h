@@ -16,9 +16,10 @@ struct obj_m{
     int cl      = -1;
     int w       = 0;
     int h       = 0;
+    float precision = 0.0;
 
     obj_m(){}
-    obj_m(const float x_, const float y_, const int frame_, const int cl_, const int width, const int height) : x(x_), y(y_), frame(frame_), cl(cl_), w(width), h(height) {}
+    obj_m(const float x_, const float y_, const int frame_, const int cl_, const int width, const int height, const float precision_) : x(x_), y(y_), frame(frame_), cl(cl_), w(width), h(height), precision(precision_){}
     void print();
 };
 }
