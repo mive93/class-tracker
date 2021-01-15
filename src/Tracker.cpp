@@ -4,6 +4,7 @@ namespace tracking{
 Tracker::Tracker(const obj_m &first_point, const int initial_age, const float dt, const int n_states, const int id_)
 {
     traj.push_back(first_point);
+    trajEkf.push_back(first_point);
     age = initial_age;
     ekf = ekfInitialize(dt, n_states, first_point);
 
@@ -15,10 +16,11 @@ Tracker::Tracker(const obj_m &first_point, const int initial_age, const float dt
     id = id_;
 }
 
-Tracker::Tracker(const std::deque<obj_m>& traj,const std::deque<state>& zList, const std::deque<state>& predList,const EKF& ekf,const int age, const int r, const int g, const int b, const int cl, const int id)
+Tracker::Tracker(const std::vector<obj_m>& traj,const std::vector<state>& zList, const std::vector<state>& predList,const EKF& ekf,const int age, const int r, const int g, const int b, const int cl, const int id)
 {
 
     this->traj      = traj;
+    this->trajEkf   = traj;
     this->zList     = zList;
     this->predList  = predList;
     this-> ekf      = ekf;
