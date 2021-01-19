@@ -11,10 +11,10 @@ class Tracker
 {
 public:
     std::vector<obj_m> traj;
-    std::vector<obj_m> trajEkf;
+    std::vector<obj_m> trajFilter;
     std::vector<state> zList;
     std::vector<state> predList;
-    UKF ukf;
+    Filter *filter;
     int age;
     int r;
     int g;
@@ -22,12 +22,12 @@ public:
     int cl;
     int id;
 
-    Tracker(const obj_m &first_point, const int initial_age, const float dt, const int n_states, const int id_);
-    Tracker(const std::vector<obj_m>& traj,const std::vector<state>& zList, const std::vector<state>& predList,const UKF& ukf,const int age, const int r, const int g, const int b, const int cl, const int id);
+    Tracker(const obj_m &first_point, const int initial_age, const float dt, const int n_states, const int id_, Filters_t filter_type);
+    Tracker(const std::vector<obj_m>& traj,const std::vector<state>& zList, const std::vector<state>& predList,Filter* filter,const int age, const int r, const int g, const int b, const int cl, const int id);
 
 private:
     Tracker();
-    UKF ukfInitialize(const float dt, const int n_states, const obj_m &first_point);
+    Filter* filterInitialize(const float dt, const int n_states, const obj_m &first_point, Filters_t filter_type);
 };
 
 }

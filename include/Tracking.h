@@ -37,10 +37,11 @@ class Tracking
 {
     bool * trackerIndexes   = nullptr;
     int curIndex            = 0;
-    int ukfStates           = 5;
+    int filterStates           = 5;
     int initialAge          = 5;
     int ageThreshold        = 0;
     float dt                = 0;
+    Filters_t filterType    = Filters_t::UKF_t;
 
     void deleteOldTrajectories(bool verbose=false);
     void addNewTrajectories(const std::vector<obj_m> &frame, const std::vector<bool> &used, const std::vector<knn_infos> &knn_res, bool verbose=false);
@@ -52,7 +53,7 @@ class Tracking
 public:
     std::vector<Tracker> trackers;
 
-    Tracking(const int n_states = 5, const float dt_ = 0.03, const int initial_age = 5);
+    Tracking(const int n_states, const float dt_, const int initial_age, const Filters_t filter_type);
     ~Tracking();
     void track(const std::vector<obj_m> &frame, bool verbose=false);
     void trackOnGivenData(const std::vector<obj_m> &data, bool verbose=false);
