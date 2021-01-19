@@ -39,10 +39,13 @@ Filter* Tracker::filterInitialize(const float dt, const int n_states, const obj_
     R.diagonal() << pow(0.5, 2), pow(0.5, 2), pow(0.1, 2), pow(0.8, 2), pow(0.02, 2);
     state s(first_point.x, first_point.y, 0, 0, 0);
 
-    if(filter_type == Filters_t::UKF_t){
-        UKF * ukf = new UKF(n_states, dt, Q, R, s);
-        return ukf;
+    if(filter_type == Filters_t::EKF_t){
+        EKF * ekf = new EKF(n_states, dt, Q, R, s);
+        return ekf;    
     }
+
+    UKF * ukf = new UKF(n_states, dt, Q, R, s);
+        return ukf;
 }
 
 }//namespace tracking

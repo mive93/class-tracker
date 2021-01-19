@@ -2,6 +2,7 @@
 #define TRACKER_H
 
 #include "ukf.h"
+#include "ekf.h"
 #include "obj.h"
 #include <cstdlib>
 #include <deque>
@@ -16,7 +17,7 @@ public:
     std::deque<obj_m> trajFilter;
     std::deque<state> zList;
     std::deque<state> predList;
-    Filter *filter;
+    Filter *filter = nullptr;
     int age;
     int r;
     int g;

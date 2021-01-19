@@ -32,8 +32,6 @@ class Filter{
     FMatrixF P;
     FMatrixF H;
 
-    virtual state stateTransition(const state &x) = 0;
-
 };
 }
 
