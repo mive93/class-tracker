@@ -35,7 +35,7 @@ Filter* Tracker::filterInitialize(const float dt, const int n_states, const obj_
 {
     tracking::FMatrixF Q = tracking::FMatrixF::Zero(n_states, n_states);
     tracking::FMatrixF R = tracking::FMatrixF::Zero(n_states, n_states);
-    Q.diagonal() << 0.001*pow(3 * dt, 2), 0.001*pow(3 * dt, 2),0.001*pow(1 * dt, 2), 0.001*pow(25 * dt, 2), 0.001*pow(0.1 * dt, 2);
+    Q.diagonal() << pow(3 * dt, 2), pow(3 * dt, 2),pow(1 * dt, 2), pow(25 * dt, 2), pow(0.1 * dt, 2);
     R.diagonal() << pow(0.5, 2), pow(0.5, 2), pow(0.1, 2), pow(0.8, 2), pow(0.02, 2);
     state s(first_point.x, first_point.y, 0, 0, 0);
 
