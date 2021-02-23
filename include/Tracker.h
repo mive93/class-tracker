@@ -7,7 +7,7 @@
 #include <cstdlib>
 #include <deque>
 
-#define MAX_HISTORY 200 
+#define MAX_HISTORY 50 
 
 namespace tracking {
 class Tracker
