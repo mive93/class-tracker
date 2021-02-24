@@ -154,7 +154,7 @@ void Tracking::kalmanStep(const std::vector<obj_m>& new_trajs){
                                                     trackers[i].traj.back().cl, 
                                                     0, 
                                                     0, 
-                                                    new_trajs[i].precision                      ) );        
+                                                    new_trajs[i].error                      ) );        
         if(trackers[i].trajFilter.size() > MAX_HISTORY) 
             trackers[i].trajFilter.pop_front();
         
