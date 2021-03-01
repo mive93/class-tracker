@@ -9,6 +9,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${CMAKE_CXX_FLAGS} -O3")
 #-------------------------------------------------------------------------------
 # External Libraries
 #-------------------------------------------------------------------------------
+find_package(Eigen3 REQUIRED)
 find_package(Python3 COMPONENTS Interpreter Development)
 
 message("Python_FOUND:${Python3_FOUND}")
@@ -23,6 +24,7 @@ message("Python_INCLUDE_DIRS:${Python3_INCLUDE_DIRS}")
 include_directories(    ${CMAKE_CURRENT_SOURCE_DIR}/include 
                         ${CMAKE_CURRENT_SOURCE_DIR}/matplotlib-cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/geodetic_utils/geodetic_utils/include/geodetic_utils
+                        ${EIGEN3_INCLUDE_DIR}
                         ${Python3_INCLUDE_DIRS}
                         )
 
