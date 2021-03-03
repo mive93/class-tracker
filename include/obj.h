@@ -17,11 +17,17 @@ struct obj_m{
     int w           = 0;
     int h           = 0;
     float error     = 0.0;
+<<<<<<< HEAD
     float latitude  = 0.0;
     float longitude = 0.0;
 
     obj_m(){}
     obj_m(const float x_, const float y_, const int frame_, const int cl_, const int width, const int height, const float error_, const float latitude_, const float longitude_) : x(x_), y(y_), frame(frame_), cl(cl_), w(width), h(height), error(error_), latitude(latitude_), longitude(longitude_){}
+=======
+
+    obj_m(){}
+    obj_m(const float x_, const float y_, const int frame_, const int cl_, const int width, const int height, const float error_) : x(x_), y(y_), frame(frame_), cl(cl_), w(width), h(height), error(error_){}
+>>>>>>> 1e00bdb9cb92371b96875148c3f4ae27784b6b9d
     void print();
 };
 }

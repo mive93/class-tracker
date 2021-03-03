@@ -1,0 +1,6 @@
+[submodule "geodetic_utils"]
+	path = geodetic_utils
+	url = https://github.com/ethz-asl/geodetic_utils
+[submodule "matplotlib-cpp"]
+	path = matplotlib-cpp
+	url = https://github.com/lava/matplotlib-cpp

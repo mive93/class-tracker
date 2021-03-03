@@ -1,19 +1,20 @@
 #include <iostream>
 #include <eigen3/Eigen/Core>
-#include "ekf.h"
+#include "ukf.h"
 #include "obj.h"
 #include "plot.h"
 #include "Tracking.h"
+#include "filter.h"
 
-void EKFtest()
+void UKFtest()
 {
     std::cout << "This is a test" << std::endl;
 
     int n_states = 5;
     float dt = 0.03;
 
-    tracking::EKF::EKFMatrixF Q = tracking::EKF::EKFMatrixF::Zero(n_states, n_states);
-    tracking::EKF::EKFMatrixF R = tracking::EKF::EKFMatrixF::Zero(n_states, n_states);
+    tracking::FMatrixF Q = tracking::FMatrixF::Zero(n_states, n_states);
+    tracking::FMatrixF R = tracking::FMatrixF::Zero(n_states, n_states);
 
     Q.diagonal() << pow(1 * dt, 2), pow(1 * dt, 2), pow(1 * dt, 2), pow(3 * dt, 2), pow(0.1 * dt, 2);
     R.diagonal() << pow(0.5, 2), pow(0.5, 2), pow(0.1, 2), pow(0.5, 2), pow(0.02, 2);
@@ -23,18 +24,18 @@ void EKFtest()
 
     tracking::state s(1, 2, 0, 0, 0);
 
-    tracking::EKF ekf(n_states, dt, Q, R, s);
-    ekf.printInternalState();
+    tracking::UKF ukf(n_states, dt, Q, R, s);
+    ukf.printInternalState();
 
-    tracking::EKF::EKFMatrixF H = tracking::EKF::EKFMatrixF::Zero(n_states, n_states);
+    tracking::FMatrixF H = tracking::FMatrixF::Zero(n_states, n_states);
     H(0, 0) = 1;
     H(1, 1) = 1;
 
     Eigen::VectorXf v(n_states);
     v << 3, 4, 0, 0, 0;
 
-    ekf.ekfStep(H, v);
-    ekf.printInternalState();
+    ukf.step(H, v);
+    ukf.printInternalState();
 }
 
 int main(int argc, char **argv)
@@ -51,8 +52,9 @@ int main(int argc, char **argv)
     int n_states = 5;
     int initial_age = 5;
     bool verbose = true;
+    tracking::Filters_t filter_type = tracking::Filters_t::UKF_t;
 
-    tracking::Tracking t(n_states, dt, initial_age);
+    tracking::Tracking t(n_states, dt, initial_age, filter_type);
     t.trackOnGivenData(data, verbose);
 
     return EXIT_SUCCESS;
