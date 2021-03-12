@@ -118,7 +118,7 @@ void Tracking::nearestNeighbor(const std::vector<obj_m> &frame, std::vector<knn_
 
             new_trajs[prev_i] = frame[cur_i];
             max_distance[prev_i] = dist;
-            trackers[prev_i].age += 1;
+            trackers[prev_i].age = initialAge;
             used[i] = 1;
         }
     }
