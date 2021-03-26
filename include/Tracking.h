@@ -3,7 +3,9 @@
 
 #include "ukf.h"
 #include "obj.h"
+#ifdef USE_MATPLOTLIB
 #include "plot.h"
+#endif
 #include "Tracker.h"
 #include <cstdlib>
 

@@ -1,3 +1,5 @@
+#ifdef USE_MATPLOTLIB
+
 #ifndef PLOT_H
 #define PLOT_H
 
@@ -11,3 +13,5 @@ void plotTrajectory(std::deque<tracking::obj_m> trajectory);
 void plotTruthvsPred(std::deque<tracking::state> groudtruth, std::deque<tracking::state> prediction);
 
 #endif /*PLOT_H*/
+
+#endif /*USE_MATPLOTLIB*/

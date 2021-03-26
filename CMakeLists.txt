@@ -5,6 +5,15 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${CMAKE_CXX_FLAGS}")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${CMAKE_CXX_FLAGS} -O3")
 
+#-------------------------------------------------------------------------------
+# Options
+#-------------------------------------------------------------------------------
+
+option(WITH_MATPLOTLIB "Compiling also matplotlib" ON)
+if(WITH_MATPLOTLIB)
+    add_compile_definitions(USE_MATPLOTLIB)
+    include_directories(   ${CMAKE_CURRENT_SOURCE_DIR}/matplotlib-cpp )
+endif()
 
 #-------------------------------------------------------------------------------
 # External Libraries
@@ -18,11 +27,7 @@ message("Python_Development_FOUND:${Python3_Development_FOUND}")
 message("Python_LIBRARIES:${Python3_LIBRARIES}")
 message("Python_INCLUDE_DIRS:${Python3_INCLUDE_DIRS}")
 
-
-
-
 include_directories(    ${CMAKE_CURRENT_SOURCE_DIR}/include 
-                        ${CMAKE_CURRENT_SOURCE_DIR}/matplotlib-cpp
                         ${CMAKE_CURRENT_SOURCE_DIR}/geodetic_utils/geodetic_utils/include/geodetic_utils
                         ${EIGEN3_INCLUDE_DIR}
                         ${Python3_INCLUDE_DIRS}

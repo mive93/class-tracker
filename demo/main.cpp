@@ -2,7 +2,9 @@
 #include <eigen3/Eigen/Core>
 #include "ukf.h"
 #include "obj.h"
+#ifdef USE_MATPLOTLIB
 #include "plot.h"
+#endif
 #include "Tracking.h"
 #include "filter.h"
 
@@ -45,7 +47,9 @@ int main(int argc, char **argv)
     for (auto d : data)
         d.print();
 
+    // #ifdef USE_MATPLOTLIB
     //testMatplotlib();
+    // #endif
 
 
     float dt = 0.03;
