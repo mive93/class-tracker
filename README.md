@@ -50,6 +50,8 @@ cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
 cmake -DCMAKE_BUILD_TYPE=Debug ..
 ```
 
+Matplotlib can be activated (resp. deactivated) with the cmake option -DWITH_MATPLOTLIB=True (resp. -DWITH_MATPLOTLIB=False )
+
 ## Running the demo
 
 This repository offers a library to exploit the implemented filter, however, there is also a dummy example of the usage of the trackers given by the program ```tracker```. Once the project has been built, it can just be run with:

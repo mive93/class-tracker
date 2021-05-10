@@ -70,8 +70,10 @@ void Tracking::deleteOldTrajectories(bool verbose){
                 trackerIndexes[trackers[i].id] = false;
                 if(verbose){
                     std::cout << "Deleting tracker " << trackers[i].id<< std::endl;
+                    #ifdef USE_MATPLOTLIB
                     if (trackers[i].zList.size() > 10)
                         plotTruthvsPred(trackers[i].zList, trackers[i].predList);
+                    #endif
                 }
             }
         }
@@ -118,7 +120,7 @@ void Tracking::nearestNeighbor(const std::vector<obj_m> &frame, std::vector<knn_
 
             new_trajs[prev_i] = frame[cur_i];
             max_distance[prev_i] = dist;
-            trackers[prev_i].age += 1;
+            trackers[prev_i].age = initialAge;
             used[i] = 1;
         }
     }
@@ -211,9 +213,11 @@ void Tracking::trackOnGivenData(const std::vector<obj_m> &data, bool verbose)
     }
 
     if(verbose){
+        #ifdef USE_MATPLOTLIB
         for (size_t i = 0; i < trackers.size(); i++)
             if (trackers[i].zList.size() > 10)
                 plotTruthvsPred(trackers[i].zList, trackers[i].predList);
+        #endif
     }
 
     std::cout << "End." << std::endl;

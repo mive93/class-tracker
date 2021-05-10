@@ -1,3 +1,4 @@
+#ifdef USE_MATPLOTLIB
 #include "plot.h"
 
 void testMatplotlib(){
@@ -57,3 +58,5 @@ void plotTruthvsPred(std::deque<tracking::state> groudtruth, std::deque<tracking
     matplotlibcpp::legend();
     matplotlibcpp::show();
 }
+
+#endif
