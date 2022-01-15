@@ -28,8 +28,8 @@ std::vector<tracking::obj_m> readDataFromFile(const std::string filename){
             //conversion from lat lon to distance(m) from centre
             gc.geodetic2Enu(d.x, d.y, 0, &east, &north, &up);
 
-            d.x = east;
-            d.y = north;
+            d.x = float(east);
+            d.y = float(north);
 
             data.push_back(d);
         }

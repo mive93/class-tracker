@@ -19,4 +19,7 @@ void Filter::printInternalState(){
 }
 
 state Filter::getEstimatedState(){ return xEst; }
+
+FMatrixF Filter::getCovarianceMatrix(){ return P;}
+
 }

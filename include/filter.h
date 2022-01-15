@@ -17,9 +17,10 @@ class Filter{
     public:
     
     Filter(){};
-    ~Filter(){};
+    virtual ~Filter() = default;
     void printInternalState();
     state getEstimatedState();
+    FMatrixF getCovarianceMatrix();
     virtual void step(const FMatrixF &H_, const Eigen::VectorXf &z) = 0;
     
     protected:

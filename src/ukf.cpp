@@ -36,8 +36,8 @@ void UKF::step(const FMatrixF &H_, const Eigen::VectorXf &z)
 	xhatsigmapoints.col(0) = xEstMatrix;
 	int i;
 	for (i = 1; i <= nStates; i++) {
-		xhatsigmapoints.col(i) = xEstMatrix + sqrt(nStates + k) * L.col(i-1);
-		xhatsigmapoints.col(nStates + i) = xEstMatrix - sqrt(nStates + k) * L.col(i-1);
+		xhatsigmapoints.col(i) = xEstMatrix + std::sqrt(float(nStates) + k) * L.col(i-1);
+		xhatsigmapoints.col(nStates + i) = xEstMatrix - sqrt(float(nStates) + k) * L.col(i-1);
 	}
 	//2-propagate sigma points
 	FMatrixF xbrevesigmapoints(nStates, 2 * nStates + 1);
@@ -50,9 +50,9 @@ void UKF::step(const FMatrixF &H_, const Eigen::VectorXf &z)
 	}
 	//3-prediction
 	FMatrixF alpha(2 * nStates + 1, 1);
-	alpha(0) = k / (nStates + k);
+	alpha(0) = k / (float(nStates) + k);
 	for (i = 1; i < 2 * nStates + 1; i++) {
-		alpha(i) = 0.5 / (nStates + k);
+		alpha(i) = 0.5f / (float(nStates) + k);
 	}
 	FMatrixF xbreve(nStates, 1);
 	xbreve = xbrevesigmapoints * alpha;
@@ -99,16 +99,16 @@ void UKF::step(const FMatrixF &H_, const Eigen::VectorXf &z)
 state UKF::stateTransition(const state &x)
 {
     state y;
-    if (abs(x.yawRate) < 0.0001){
-        y.x = x.x + x.vel * dt * cos(x.yaw);
-        y.y = x.y + x.vel * dt * sin(x.yaw);
+    if (abs(x.yawRate) < 0.0001f){
+        y.x = x.x + x.vel * dt * float(cos(x.yaw));
+        y.y = x.y + x.vel * dt * float(sin(x.yaw));
         y.yaw = x.yaw;
         y.vel = x.vel;
-        y.yawRate = 0.0001;
+        y.yawRate = 0.0001f;
     }
     else{
-        y.x = x.x + (x.vel / x.yawRate) * (sin(x.yawRate * dt + x.yaw) - sin(x.yaw));
-        y.y = x.y + (x.vel / x.yawRate) * (-cos(x.yawRate * dt + x.yaw) + cos(x.yaw));
+        y.x = x.x + (x.vel / x.yawRate) * (float(sin(x.yawRate * dt + x.yaw)) - float(sin(x.yaw)));
+        y.y = x.y + (x.vel / x.yawRate) * (-float(cos(x.yawRate * dt + x.yaw)) + float(cos(x.yaw)));
         y.yaw = x.yaw + x.yawRate * dt;
         y.vel = x.vel;
         y.yawRate = x.yawRate;

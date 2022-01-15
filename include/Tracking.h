@@ -39,11 +39,11 @@ class Tracking
 {
     bool * trackerIndexes   = nullptr;
     int curIndex            = 0;
-    int filterStates           = 5;
-    int initialAge          = 5;
     int ageThreshold        = 0;
-    float dt                = 0;
-    Filters_t filterType    = Filters_t::UKF_t;
+    int filterStates;
+    int initialAge;
+    float dt;
+    Filters_t filterType;
 
     void deleteOldTrajectories(bool verbose=false);
     void addNewTrajectories(const std::vector<obj_m> &frame, const std::vector<bool> &used, const std::vector<knn_infos> &knn_res, bool verbose=false);

@@ -26,7 +26,7 @@ public:
     int id;
 
     Tracker(const obj_m &first_point, const int initial_age, const float dt, const int n_states, const int id_, Filters_t filter_type);
-    Tracker(const std::deque<obj_m>& traj,const std::deque<state>& zList, const std::deque<state>& predList,Filter* filter,const int age, const int r, const int g, const int b, const int cl, const int id);
+    Tracker(const std::deque<obj_m>& traj_,const std::deque<state>& zList_, const std::deque<state>& predList_,Filter* filter_,const int age_, const int r_, const int g_, const int b_, const int cl_, const int id_);
 
 private:
     Tracker();

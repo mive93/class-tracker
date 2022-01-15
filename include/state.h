@@ -9,11 +9,11 @@ namespace tracking{
 
 struct state
 {
-  float x          = 0;
-  float y          = 0;
-  float yaw        = 0;
-  float vel        = 0;
-  float yawRate    = 0;
+  float x          = 0.0f;
+  float y          = 0.0f;
+  float yaw        = 0.0f;
+  float vel        = 0.0f;
+  float yawRate    = 0.0f;
 
   state() {}
   state(const float x_, const float y_, const float yaw_, const float vel_, 

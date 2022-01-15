@@ -16,27 +16,28 @@ Tracker::Tracker(const obj_m &first_point, const int initial_age, const float dt
     id = id_;
 }
 
-Tracker::Tracker(const std::deque<obj_m>& traj,const std::deque<state>& zList, const std::deque<state>& predList,Filter* filter,const int age, const int r, const int g, const int b, const int cl, const int id)
+Tracker::Tracker(const std::deque<obj_m>& traj_,const std::deque<state>& zList_, const std::deque<state>& predList_,Filter* filter_,const int age_, const int r_, const int g_, const int b_, const int cl_, const int id_)
 {
-    this->traj          = traj;
-    this->trajFilter    = traj;
-    this->zList         = zList;
-    this->predList      = predList;
-    this-> filter       = filter;
-    this->age           = age;
-    this->r             = r;
-    this->g             = g;
-    this->b             = b;
-    this->cl            = cl;
-    this->id            = id;
+    this->traj          = traj_;
+    this->trajFilter    = traj_;
+    this->zList         = zList_;
+    this->predList      = predList_;
+    this-> filter       = filter_;
+    this->age           = age_;
+    this->r             = r_;
+    this->g             = g_;
+    this->b             = b_;
+    this->cl            = cl_;
+    this->id            = id_;
 }
 
 Filter* Tracker::filterInitialize(const float dt, const int n_states, const obj_m &first_point, Filters_t filter_type)
 {
     tracking::FMatrixF Q = tracking::FMatrixF::Zero(n_states, n_states);
     tracking::FMatrixF R = tracking::FMatrixF::Zero(n_states, n_states);
-    Q.diagonal() << pow(3 * dt, 2), pow(3 * dt, 2),pow(1 * dt, 2), pow(25 * dt, 2), pow(0.1 * dt, 2);
-    R.diagonal() << pow(0.5, 2), pow(0.5, 2), pow(0.1, 2), pow(0.8, 2), pow(0.02, 2);
+    float dt2 = dt * dt;
+    Q.diagonal() << 3.0f*3.0f*dt2, 3.0f*3.0f*dt2, 1.0f*1.0f*dt2, 25.0f*25.0f*dt2, 0.1f*0.1f*dt2;
+    R.diagonal() << 0.5f*0.5f, 0.5f*0.5f, 0.1f*0.1f, 0.8f*0.8f, 0.02f*0.02f;
     state s(first_point.x, first_point.y, 0, 0, 0);
 
     if(filter_type == Filters_t::EKF_t){

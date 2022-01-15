@@ -3,7 +3,9 @@
 
 #include <eigen3/Eigen/LU>
 #include <eigen3/Eigen/Cholesky>
+
 #include <iomanip>
+#include <cmath>
 
 #include "filter.h"
 

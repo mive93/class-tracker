@@ -13,34 +13,34 @@ void UKFtest()
     std::cout << "This is a test" << std::endl;
 
     int n_states = 5;
-    float dt = 0.03;
+    float dt = 0.03f;
 
     tracking::FMatrixF Q = tracking::FMatrixF::Zero(n_states, n_states);
     tracking::FMatrixF R = tracking::FMatrixF::Zero(n_states, n_states);
-
-    Q.diagonal() << pow(1 * dt, 2), pow(1 * dt, 2), pow(1 * dt, 2), pow(3 * dt, 2), pow(0.1 * dt, 2);
-    R.diagonal() << pow(0.5, 2), pow(0.5, 2), pow(0.1, 2), pow(0.5, 2), pow(0.02, 2);
+    float dt2 = dt * dt;
+    Q.diagonal() << 1.0f*1.0f*dt2, 1.0f*1.0f*dt2, 1.0f*1.0f*dt2, 3.0f*3.0f*dt2, 0.1f*0.1f*dt2;
+    R.diagonal() << 0.5f*0.5f, 0.5f*0.5f, 0.1f*0.1f, 0.5f*0.5f, 0.02f*0.02f;
 
     std::cout << Q << std::endl;
     std::cout << R << std::endl;
 
-    tracking::state s(1, 2, 0, 0, 0);
+    tracking::state s(1.0f, 2.0f, 0.0f, 0.0f, 0.0f);
 
     tracking::UKF ukf(n_states, dt, Q, R, s);
     ukf.printInternalState();
 
     tracking::FMatrixF H = tracking::FMatrixF::Zero(n_states, n_states);
-    H(0, 0) = 1;
-    H(1, 1) = 1;
+    H(0, 0) = 1.0f;
+    H(1, 1) = 1.0f;
 
     Eigen::VectorXf v(n_states);
-    v << 3, 4, 0, 0, 0;
+    v << 3.0f, 4.0f, 0.0f, 0.0f, 0.0f;
 
     ukf.step(H, v);
     ukf.printInternalState();
 }
 
-int main(int argc, char **argv)
+int main(/*int argc, char **argv*/)
 {
 
     std::vector<tracking::obj_m> data = readDataFromFile("../data/test_ll.txt");
@@ -52,11 +52,11 @@ int main(int argc, char **argv)
     // #endif
 
 
-    float dt = 0.03;
+    float dt = 0.03f;
     int n_states = 5;
     int initial_age = 5;
     bool verbose = true;
-    tracking::Filters_t filter_type = tracking::Filters_t::UKF_t;
+    tracking::Filters_t filter_type = tracking::Filters_t::EKF_t;
 
     tracking::Tracking t(n_states, dt, initial_age, filter_type);
     t.trackOnGivenData(data, verbose);

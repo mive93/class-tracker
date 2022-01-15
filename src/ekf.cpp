@@ -55,16 +55,16 @@ state EKF::stateTransition()
 {
     state x = xEst;
     state y;
-    if (abs(x.yawRate) < 0.0001){
-        y.x = x.x + x.vel * dt * cos(x.yaw);
-        y.y = x.y + x.vel * dt * sin(x.yaw);
+    if (abs(x.yawRate) < 0.0001f){
+        y.x = x.x + x.vel * dt * float(cos(x.yaw));
+        y.y = x.y + x.vel * dt * float(sin(x.yaw));
         y.yaw = x.yaw;
         y.vel = x.vel;
-        y.yawRate = 0.0001;
+        y.yawRate = 0.0001f;
     }
     else{
-        y.x = x.x + (x.vel / x.yawRate) * (sin(x.yawRate * dt + x.yaw) - sin(x.yaw));
-        y.y = x.y + (x.vel / x.yawRate) * (-cos(x.yawRate * dt + x.yaw) + cos(x.yaw));
+        y.x = x.x + (x.vel / x.yawRate) * (float(sin(x.yawRate * dt + x.yaw)) - float(sin(x.yaw)));
+        y.y = x.y + (x.vel / x.yawRate) * (-float(cos(x.yawRate * dt + x.yaw)) + float(cos(x.yaw)));
         y.yaw = x.yaw + x.yawRate * dt;
         y.vel = x.vel;
         y.yawRate = x.yawRate;
@@ -78,12 +78,12 @@ FMatrixF EKF::jacobian(const state &x)
     FMatrixF J(nStates, nStates);
     J.setIdentity();
 
-    J(0, 2) = (x.vel / x.yawRate) * (cos(x.yawRate * dt + x.yaw) - cos(x.yaw));
-    J(0, 3) = (1.0 / x.yawRate) * (sin(x.yawRate * dt + x.yaw) - sin(x.yaw));
-    J(0, 4) = (dt * x.vel / x.yawRate) * cos(x.yawRate * dt + x.yaw) - (x.vel / pow(x.yawRate, 2)) * (sin(x.yawRate * dt + x.yaw) - sin(x.yaw));
-    J(1, 2) = (x.vel / x.yawRate) * (sin(x.yawRate * dt + x.yaw) - sin(x.yaw));
-    J(1, 3) = (1.0 / x.yawRate) * (-cos(x.yawRate * dt + x.yaw) + cos(x.yaw));
-    J(1, 4) = (dt * x.vel / x.yawRate) * sin(x.yawRate * dt + x.yaw) - (x.vel / pow(x.yawRate, 2)) * (-cos(x.yawRate * dt + x.yaw) + cos(x.yaw));
+    J(0, 2) = (x.vel / x.yawRate) * (float(cos(x.yawRate * dt + x.yaw)) - float(cos(x.yaw)));
+    J(0, 3) = (1.0f / x.yawRate) * (float(sin(x.yawRate * dt + x.yaw)) - float(sin(x.yaw)));
+    J(0, 4) = (dt * x.vel / x.yawRate) * float(cos(x.yawRate * dt + x.yaw)) - (x.vel / (x.yawRate * x.yawRate)) * (float(sin(x.yawRate * dt + x.yaw)) - float(sin(x.yaw)));
+    J(1, 2) = (x.vel / x.yawRate) * (float(sin(x.yawRate * dt + x.yaw)) - float(sin(x.yaw)));
+    J(1, 3) = (1.0f / x.yawRate) * (-float(cos(x.yawRate * dt + x.yaw)) + float(cos(x.yaw)));
+    J(1, 4) = (dt * x.vel / x.yawRate) * float(sin(x.yawRate * dt + x.yaw)) - (x.vel / (x.yawRate * x.yawRate)) * (-float(cos(x.yawRate * dt + x.yaw)) + float(cos(x.yaw)));
     J(2, 4) = dt;
 
     return J;
